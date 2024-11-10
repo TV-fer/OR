@@ -1,4 +1,4 @@
-// Pozovi getData kada se stranica učita za početni prikaz podataka
+//getData se zove čim se stranica učita 
 window.onload = () => getData();
 
 async function getData(searchTerm = '', attribute = '') {
@@ -27,7 +27,7 @@ async function getData(searchTerm = '', attribute = '') {
     });
 }
 
-// Funkcija za filtriranje podataka
+//funkcija za filtriranje podataka
 function applyFilter() {
     const searchTerm = document.getElementById("filter").value;
     const attribute = document.getElementById("attribute").value;
@@ -35,17 +35,16 @@ function applyFilter() {
     getData(searchTerm, attribute);
 }
 
+//funkcija za download u CSV formatu
 function downloadCSV() {
     const rows = Array.from(document.querySelectorAll("#tennisTable tbody tr"));
     const csvContent = [];
 
-    // Dodajemo podatke iz tablice
     rows.forEach(row => {
         const cellData = Array.from(row.querySelectorAll("td")).map(cell => cell.textContent);
         csvContent.push(cellData.join(","));
     });
 
-    // Kreiraj CSV datoteku
     const blob = new Blob([csvContent.join("\n")], { type: "text/csv" });
     const downloadLink = document.createElement("a");
     downloadLink.href = URL.createObjectURL(blob);
@@ -53,6 +52,7 @@ function downloadCSV() {
     downloadLink.click();
 }
 
+//funkcija za download u JSON formatu
 function downloadJSON() {
     const rows = Array.from(document.querySelectorAll("#tennisTable tbody tr"));
     const dataJSON = rows.map(row => {
