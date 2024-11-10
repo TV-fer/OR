@@ -1,0 +1,110 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "array",
+    "title": "Skup teniskih igrača",
+    "description": "Skup osnovnih podataka o teniskim igračima, uključujući osnovne statistike i informacije o osvojenim turnirima.",
+    "items": {
+        "type": "object",
+        "title": "Podaci o teniskom igraču",
+        "description": "Sadrži osnovne informacije o igraču, kao što su ime, nacionalnost, fizičke karakteristike i postignuća.",
+        "required": [
+            "igrac_id",
+            "ime",
+            "prezime",
+            "nacionalnost",
+            "godine",
+            "visina_cm",
+            "tezina_kg",
+            "najvisi_ranking",
+            "broj_osvojenih_turnira",
+            "omiljena_podloga",
+            "turniri"
+        ],
+        "properties": {
+            "igrac_id": {
+                "type": "integer",
+                "title": "ID igrača",
+                "description": "Jedinstveni identifikator za svakog teniskog igrača."
+            },
+            "ime": {
+                "type": "string",
+                "title": "Ime",
+                "description": "Ime teniskog igrača."
+            },
+            "prezime": {
+                "type": "string",
+                "title": "Prezime",
+                "description": "Prezime teniskog igrača."
+            },
+            "nacionalnost": {
+                "type": "string",
+                "title": "Nacionalnost",
+                "description": "Država ili regija iz koje dolazi teniski igrač."
+            },
+            "godine": {
+                "type": "integer",
+                "title": "Godine",
+                "description": "Dob teniskog igrača u godinama."
+            },
+            "visina_cm": {
+                "type": "integer",
+                "title": "Visina",
+                "description": "Visina teniskog igrača izražena u centimetrima."
+            },
+            "tezina_kg": {
+                "type": "integer",
+                "title": "Težina",
+                "description": "Težina teniskog igrača izražena u kilogramima."
+            },
+            "najvisi_ranking": {
+                "type": "integer",
+                "title": "Najviši ranking",
+                "description": "Najviši ostvareni ranking teniskog igrača na ATP ljestvici."
+            },
+            "broj_osvojenih_turnira": {
+                "type": "integer",
+                "title": "Broj osvojenih turnira",
+                "description": "Ukupan broj turnira koje je teniski igrač osvojio."
+            },
+            "omiljena_podloga": {
+                "type": "string",
+                "title": "Omiljena podloga",
+                "description": "Vrsta teniske podloge koju igrač najviše preferira (npr. trava, zemlja, tvrda podloga)."
+            },
+            "turniri": {
+                "type": "array",
+                "title": "Osvojeni turniri",
+                "description": "Popis turnira koje je igrač osvojio, uključujući podatke o svakom turniru.",
+                "items": {
+                    "type": "object",
+                    "title": "Podaci o turniru",
+                    "description": "Informacije o pojedinačnom turniru koji je igrač osvojio.",
+                    "required": ["turnir_id", "naziv", "godina", "povrsina"],
+                    "properties": {
+                        "turnir_id": {
+                            "type": "integer",
+                            "title": "ID turnira",
+                            "description": "Jedinstveni identifikator za turnir."
+                        },
+                        "naziv": {
+                            "type": "string",
+                            "title": "Naziv turnira",
+                            "description": "Ime turnira koji je igrač osvojio."
+                        },
+                        "godina": {
+                            "type": "integer",
+                            "title": "Godina osvajanja",
+                            "description": "Godina u kojoj je igrač osvojio turnir."
+                        },
+                        "povrsina": {
+                            "type": "string",
+                            "title": "Vrsta podloge",
+                            "description": "Vrsta podloge na kojoj se igrao turnir (npr. zemlja, trava, tvrda podloga)."
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

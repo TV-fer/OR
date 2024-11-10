@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datatable</title>
+</head>
+<body>
+    <h1>Tablični prikaz podataka</h1>
+    <div style="display: flex; flex-direction: column; align-items: flex-start; width: 200px; padding: 10px; ">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start;">
+            <label for="filter">Filter:</label>
+            <input type="text" id="filter" placeholder="Unesi pojam">
+            <select id="attribute">
+                <option value="all">Sva polja</option>
+                <option value="ime">Ime</option>
+                <option value="prezime">Prezime</option>
+                <option value="nacionalnost">Nacionalnost</option>
+                <option value="omiljena_podloga">Omiljena podloga</option>
+                <option value="godine">Godine</option>
+                <option value="visina_cm">Visina (cm)</option>
+                <option value="tezina_kg">Tezina (kg)</option>
+                <option value="najvisi_ranking">Najvisi rank</option>
+                <option value="broj_osvojenih_turnira">Broj osvojenih turnira</option>
+            </select>
+            <button onclick="applyFilter()">Filtriraj</button>
+        </div>
+        <button onclick="downloadJSON()">Preuzmi JSON</button>
+        <button onclick="downloadCSV()">Preuzmi CSV</button>
+    </div>
+
+    <table id="tennisTable">
+        <thead>
+            <tr>
+                <th>ID igraca</th>
+                <th>Ime</th>
+                <th>Prezime</th>
+                <th>Nacionalnost</th>
+                <th>Godine</th>
+                <th>Visina</th>
+                <th>Težina</th>
+                <th>Najviši ranking</th>
+                <th>Broj osvojenih turnira</th>
+                <th>Omiljena podloga</th>
+                <th>Naglašeni turniri</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="table.js"></script>
+
+</body>
+</html>

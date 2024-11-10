@@ -1,0 +1,238 @@
+[
+  {
+    "igrac_id": 2,
+    "ime": "Rafael",
+    "prezime": "Nadal",
+    "nacionalnost": "Španjolska",
+    "godine": 37,
+    "visina_cm": 185,
+    "tezina_kg": 85,
+    "najvisi_ranking": 1,
+    "broj_osvojenih_turnira": 92,
+    "omiljena_podloga": "Zemlja",
+    "turniri": [
+      {
+        "turnir_id": 3,
+        "naziv": "French Open",
+        "godina": 2020,
+        "povrsina": "Zemlja"
+      },
+      {
+        "turnir_id": 4,
+        "naziv": "US Open",
+        "godina": 2019,
+        "povrsina": "Tvrda"
+      }
+    ]
+  },
+  {
+    "igrac_id": 3,
+    "ime": "Roger",
+    "prezime": "Federer",
+    "nacionalnost": "Švicarska",
+    "godine": 42,
+    "visina_cm": 185,
+    "tezina_kg": 85,
+    "najvisi_ranking": 1,
+    "broj_osvojenih_turnira": 103,
+    "omiljena_podloga": "Trava",
+    "turniri": [
+      {
+        "turnir_id": 5,
+        "naziv": "Wimbledon",
+        "godina": 2017,
+        "povrsina": "Trava"
+      },
+      {
+        "turnir_id": 6,
+        "naziv": "Australian Open",
+        "godina": 2018,
+        "povrsina": "Tvrda"
+      }
+    ]
+  },
+  {
+    "igrac_id": 6,
+    "ime": "Carlos",
+    "prezime": "Alcaraz",
+    "nacionalnost": "Španjolska",
+    "godine": 20,
+    "visina_cm": 185,
+    "tezina_kg": 74,
+    "najvisi_ranking": 1,
+    "broj_osvojenih_turnira": 12,
+    "omiljena_podloga": "Zemlja",
+    "turniri": [
+      {
+        "turnir_id": 10,
+        "naziv": "US Open",
+        "godina": 2022,
+        "povrsina": "Tvrda"
+      },
+      {
+        "turnir_id": 11,
+        "naziv": "Madrid Open",
+        "godina": 2023,
+        "povrsina": "Zemlja"
+      }
+    ]
+  },
+  {
+    "igrac_id": 7,
+    "ime": "Stefanos",
+    "prezime": "Tsitsipas",
+    "nacionalnost": "Grčka",
+    "godine": 25,
+    "visina_cm": 193,
+    "tezina_kg": 90,
+    "najvisi_ranking": 3,
+    "broj_osvojenih_turnira": 10,
+    "omiljena_podloga": "Zemlja",
+    "turniri": [
+      {
+        "turnir_id": 12,
+        "naziv": "Monte Carlo Masters",
+        "godina": 2021,
+        "povrsina": "Zemlja"
+      }
+    ]
+  },
+  {
+    "igrac_id": 10,
+    "ime": "Casper",
+    "prezime": "Ruud",
+    "nacionalnost": "Norveška",
+    "godine": 25,
+    "visina_cm": 183,
+    "tezina_kg": 77,
+    "najvisi_ranking": 2,
+    "broj_osvojenih_turnira": 10,
+    "omiljena_podloga": "Zemlja",
+    "turniri": [
+      {
+        "turnir_id": 16,
+        "naziv": "Swiss Open",
+        "godina": 2021,
+        "povrsina": "Zemlja"
+      }
+    ]
+  },
+  {
+    "igrac_id": 1,
+    "ime": "Novak",
+    "prezime": "Đoković",
+    "nacionalnost": "Srbija",
+    "godine": 36,
+    "visina_cm": 188,
+    "tezina_kg": 77,
+    "najvisi_ranking": 1,
+    "broj_osvojenih_turnira": 95,
+    "omiljena_podloga": "Tvrda",
+    "turniri": [
+      {
+        "turnir_id": 1,
+        "naziv": "Australian Open",
+        "godina": 2021,
+        "povrsina": "Tvrda"
+      },
+      {
+        "turnir_id": 2,
+        "naziv": "Wimbledon",
+        "godina": 2022,
+        "povrsina": "Trava"
+      }
+    ]
+  },
+  {
+    "igrac_id": 4,
+    "ime": "Andy",
+    "prezime": "Murray",
+    "nacionalnost": "Ujedinjeno Kraljevstvo",
+    "godine": 36,
+    "visina_cm": 190,
+    "tezina_kg": 84,
+    "najvisi_ranking": 1,
+    "broj_osvojenih_turnira": 46,
+    "omiljena_podloga": "Tvrda",
+    "turniri": [
+      {
+        "turnir_id": 7,
+        "naziv": "Wimbledon",
+        "godina": 2016,
+        "povrsina": "Trava"
+      },
+      {
+        "turnir_id": 8,
+        "naziv": "US Open",
+        "godina": 2012,
+        "povrsina": "Tvrda"
+      }
+    ]
+  },
+  {
+    "igrac_id": 5,
+    "ime": "Daniil",
+    "prezime": "Medvedev",
+    "nacionalnost": "Rusija",
+    "godine": 27,
+    "visina_cm": 198,
+    "tezina_kg": 83,
+    "najvisi_ranking": 2,
+    "broj_osvojenih_turnira": 20,
+    "omiljena_podloga": "Tvrda",
+    "turniri": [
+      {
+        "turnir_id": 9,
+        "naziv": "US Open",
+        "godina": 2021,
+        "povrsina": "Tvrda"
+      }
+    ]
+  },
+  {
+    "igrac_id": 8,
+    "ime": "Alexander",
+    "prezime": "Zverev",
+    "nacionalnost": "Njemačka",
+    "godine": 27,
+    "visina_cm": 198,
+    "tezina_kg": 86,
+    "najvisi_ranking": 2,
+    "broj_osvojenih_turnira": 20,
+    "omiljena_podloga": "Tvrda",
+    "turniri": [
+      {
+        "turnir_id": 13,
+        "naziv": "ATP Finals",
+        "godina": 2018,
+        "povrsina": "Tvrda"
+      },
+      {
+        "turnir_id": 14,
+        "naziv": "Madrid Open",
+        "godina": 2019,
+        "povrsina": "Zemlja"
+      }
+    ]
+  },
+  {
+    "igrac_id": 9,
+    "ime": "Jannik",
+    "prezime": "Sinner",
+    "nacionalnost": "Italija",
+    "godine": 22,
+    "visina_cm": 188,
+    "tezina_kg": 76,
+    "najvisi_ranking": 6,
+    "broj_osvojenih_turnira": 9,
+    "omiljena_podloga": "Tvrda",
+    "turniri": [
+      {
+        "turnir_id": 15,
+        "naziv": "Miami Open",
+        "godina": 2021,
+        "povrsina": "Tvrda"
+      }
+    ]
+  }
+]
