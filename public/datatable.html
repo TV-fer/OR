@@ -48,7 +48,41 @@
         <tbody></tbody>
     </table>
 
-    <script src="table.js"></script>
+    <br/>
+
+    <h1>Tablični prikaz turnira</h1>
+    <div style="display: flex; flex-direction: column; align-items: flex-start; width: 200px; padding: 10px; ">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start;">
+            <label for="filter">Filter:</label>
+            <input type="text" id="tournamentFilter" placeholder="Unesi pojam">
+            <select id="tournamentAttribute">
+                <option value="naziv">Naziv</option>
+                <option value="godina">Godina</option>
+                <option value="povrsina">Povrsina</option>
+            </select>
+            <button onclick="applyTournamentFilter()">Filtriraj</button>
+        </div>
+    </div>
+
+    <table id="tournamentTable">
+        <thead>
+            <tr>
+                <th>ID turnira</th>
+                <th>Naziv</th>
+                <th>Godina</th>
+                <th>Povrsina</th>
+                <th>OSVOJIO?</th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <br/>
+
+    <a href="/">Povrataka na glavnu stranicu</a>
+
+    <script src="datatable.js"></script>
 
 </body>
 </html>

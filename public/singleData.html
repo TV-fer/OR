@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single player</title>
+</head>
+<body>
+    <h1>Dohvaćanje pojedinačnog igrača</h1>
+    <div style="display: flex; flex-direction: column; align-items: flex-start; width: 200px; padding: 10px; ">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start;">
+            <label for="filter">ID igrača:</label>
+            <input type="text" id="igrac_id" placeholder="Unesi ID">
+            <button onclick="applyPlayerIdFilter()">Filtriraj</button>
+        </div>
+    </div>
+    <table id="singlePlayerTable">
+        <thead>
+            <tr>
+                <th>ID igraca</th>
+                <th>Ime</th>
+                <th>Prezime</th>
+                <th>Nacionalnost</th>
+                <th>Godine</th>
+                <th>Visina</th>
+                <th>Težina</th>
+                <th>Najviši ranking</th>
+                <th>Broj osvojenih turnira</th>
+                <th>Omiljena podloga</th>
+                <th>Naglašeni turniri</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <br/>
+
+    <div style="display: flex; flex-direction: column; align-items: flex-start; width: 200px; padding: 10px; ">
+        <div style="display: flex; flex-direction: row; justify-content: flex-start;">
+            <label for="filter">ID turnira:</label>
+            <input type="text" id="turnir_id" placeholder="Unesi ID">
+            <button onclick="applyTournamentIdFilter()">Filtriraj</button>
+        </div>
+    </div>
+    <table id="singleTournamentTable">
+        <thead>
+            <tr>
+                <th>ID turnira</th>
+                <th>Naziv</th>
+                <th>Godina</th>
+                <th>Površina</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <br/>
+
+    <a href="/index.html">Povrataka na glavnu stranicu</a>
+    
+    <script src="singleData.js"></script>
+
+</body>
+</html>
