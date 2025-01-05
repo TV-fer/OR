@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Tennis Player</title>
+</head>
+<body>
+    <h1>Add a New Tennis Player</h1>
+    <form id="addPlayerForm">
+        <label for="ime">Ime:</label>
+        <input type="text" id="ime" name="ime" required><br><br>
+
+        <label for="prezime">Prezime:</label>
+        <input type="text" id="prezime" name="prezime" required><br><br>
+
+        <label for="nacionalnost">Nacionalnost:</label>
+        <input type="text" id="nacionalnost" name="nacionalnost" required><br><br>
+
+        <label for="godine">Godine:</label>
+        <input type="number" id="godine" name="godine" required><br><br>
+
+        <label for="visina_cm">Visina (cm):</label>
+        <input type="number" id="visina_cm" name="visina_cm" required><br><br>
+
+        <label for="tezina_kg">Težina (kg):</label>
+        <input type="number" id="tezina_kg" name="tezina_kg" required><br><br>
+
+        <label for="najvisi_ranking">Najvisi ranking:</label>
+        <input type="number" id="najvisi_ranking" name="najvisi_ranking" required><br><br>
+
+        <label for="broj_osvojenih_turnira">Broj titula:</label>
+        <input type="number" id="broj_osvojenih_turnira" name="broj_osvojenih_turnira" required><br><br>
+
+        <label for="omiljena_podloga">Omiljena podloga:</label>
+        <input type="text" id="omiljena_podloga" name="omiljena_podloga" required><br><br>
+
+        <label for="turniri">Turniri:</label><br>
+        <div id="tournamentsList">
+            <!--  -->
+        </div>
+        <button type="button" id="addTournament">Dodaj turnir</button><br><br>
+
+        <button type="submit">Dodaj igrača</button>
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script src="postPlayer.js"></script>
+</body>
+</html>

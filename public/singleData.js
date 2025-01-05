@@ -67,7 +67,8 @@ function displayPlayerData(tennisPlayer) {
 }
 
 function displayTournamentData(tennisTournament) {
-    if (tennisPlayer) {
+    if (tennisTournament) {
+        console.log("Tournament found:", tennisTournament);
         const tableBody = document.querySelector("#singleTournamentTable tbody");
         tableBody.innerHTML = '';
         const rowElement = document.createElement("tr");
@@ -80,7 +81,7 @@ function displayTournamentData(tennisTournament) {
         tableBody.appendChild(rowElement);
     } else {
         console.log("No tournament found.");
-        const tableBody = document.querySelector("#singlePlayerTable tbody");
+        const tableBody = document.querySelector("#singleTournamentTable tbody");
         tableBody.innerHTML = '';
     }
 }
@@ -100,7 +101,7 @@ async function applyPlayerIdFilter() {
             displayPlayerData(null); // Pass `null` in case of an unexpected issue
         }
     } catch (error) {
-        console.log('Error fetching player data:', error);
+        console.error('Error fetching player data:', error);
         displayPlayerData(null); // Pass `null` in case of a network error or exception
     }
 }
@@ -120,7 +121,7 @@ async function applyTournamentIdFilter() {
             displayTournamentData(null); // Pass `null` in case of an unexpected issue
         }
     } catch (error) {
-        console.log('Error fetching tournament data:', error);
+        console.error('Error fetching tournament data:', error);
         displayTournamentData(null); // Pass `null` in case of a network error or exception
     }
 }

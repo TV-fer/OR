@@ -2,6 +2,7 @@ const express = require('express');
 const { Pool } = require('pg');
 
 const app = express();
+app.use(express.json());
 app.use(express.static('public'));
 const port = 3000;
 
@@ -14,11 +15,10 @@ const pool = new Pool({
     port: 5433,
 });
 
-
+//GET--------------------------------------------------------------------------------------------------
 app.get('/api/allTennisPlayers', async (req,res) => {   //DOHVAĆANJE CJELOKUPNE KOLEKCIJE
     console.log("getting all tennis players")
     try {
-        let query = '';
         let values = [];
         query = `
             SELECT igr.*, 
@@ -28,10 +28,28 @@ app.get('/api/allTennisPlayers', async (req,res) => {   //DOHVAĆANJE CJELOKUPNE
             GROUP BY igr.igrac_id;
         `;
         const result = await pool.query(query, values);
-        res.json(result.rows);
+        res.status(200).json(result.rows);
     } catch (error) {
         console.error('Greška pri dohvaćanju svih podataka iz baze:', error);
         res.status(500).send('Greška pri dohvaćanju svih podataka iz baze');
+    }
+})
+
+app.get(`/api/allTennisTournaments`, async (req,res) => { //DOHVAĆANJE SVIH TURNIRA
+    console.log("getting all tennis tournaments")
+    try {
+        let values = [];
+        query = `
+            SELECT turniri.*
+            FROM turniri
+            GROUP BY turnir_id
+            ORDER BY turnir_id
+        `;
+        const result = await pool.query(query, values);
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.log('Greška pri dohvaćanju svih turnira iz baze:', error);
+        res.status(500).send('Greška pri dohvaćanju svih turnira iz baze');
     }
 })
 
@@ -52,7 +70,7 @@ app.get('/api/singleTennisPlayer', async (req,res) => { //DOHVAĆANJE POJEDINAČ
         `;
         const result = await pool.query(query, values);
         if (result.rows.length > 0) {
-            res.json(result.rows[0]);
+            res.status(200).json(result.rows[0]);
         } else {
             res.status(404).send('No data found');
         }
@@ -76,7 +94,7 @@ app.get(`/api/singleTennisTournament`, async (req,res) => { //DOHVAĆANJE POJEDI
         `;
         const result = await pool.query(query, values);
         if (result.rows.length > 0) {
-            res.json(result.rows[0]);
+            res.status(200).json(result.rows[0]);
         } else {
             res.status(404).send('No data found');
         }
@@ -90,15 +108,15 @@ app.get(`/api/tennisTournaments`, async (req,res) => { //DOHVAĆANJE FILTRIRANIH
     console.log("getting filtered tournaments")
     try {
         const searchTerm = req.query.filter || '';
-        const attribute = req.query.attribute || 'all';
+        const attribute = req.query.attribute;
         let query = '';
         let values = [`%${searchTerm}%`]; // Filter za SQL upit
-        const numericTerm = parseInt(searchTerm)
+        const numericSearch = parseInt(searchTerm)
         if (isNaN(numericSearch)) {
             query = `
                 SELECT turniri.*
-                    FROM turniri
-                WHERE ${attribute} = $1
+                FROM turniri
+                WHERE ${attribute} ILIKE $1
                 GROUP BY turnir_id;
             `;
         } else {
@@ -111,7 +129,7 @@ app.get(`/api/tennisTournaments`, async (req,res) => { //DOHVAĆANJE FILTRIRANIH
             values = [numericSearch]; // Filter kao broj
         }
         const result = await pool.query(query, values);
-        res.json(result.rows);
+        res.status(200).json(result.rows);
     } catch (error) {
         console.error('Greška pri dohvaćanju filtriranih turnira iz baze:', error);
         res.status(500).send('Greška pri dohvaćanju filtriranih turnira iz baze');
@@ -159,21 +177,21 @@ app.get('/api/tennisPlayers', async (req, res) => { //DOHVAĆANJE FILTRIRANIH RE
                 values = [numericSearch]; // Filter kao broj
             }
         } else if (["godine", "visina_cm", "tezina_kg", "najvisi_ranking", "broj_osvojenih_turnira"].includes(attribute)) {
-                // filtriranje za brojeve
-                const numericSearch = parseFloat(searchTerm);
-                if (isNaN(numericSearch)) {
-                    return res.status(400).send('Pogrešan unos broja');
-                }
-                query = `
-                    SELECT igr.*, 
-                        ARRAY_AGG(CONCAT(turn.naziv, ' (', turn.godina, ') - ', turn.povrsina)) AS "Osvojeni_turniri"
-                    FROM igraci igr
-                    LEFT JOIN turniri turn ON igr.igrac_id = turn.osvojio_id
-                    WHERE igr.${attribute} = $1
-                    GROUP BY igr.igrac_id;
-                `;
-                values = [numericSearch];
-            } else {
+            // filtriranje za brojeve
+            const numericSearch = parseFloat(searchTerm);
+            if (isNaN(numericSearch)) {
+                return res.status(400).send('Pogrešan unos broja');
+            }
+            query = `
+                SELECT igr.*, 
+                    ARRAY_AGG(CONCAT(turn.naziv, ' (', turn.godina, ') - ', turn.povrsina)) AS "Osvojeni_turniri"
+                FROM igraci igr
+                LEFT JOIN turniri turn ON igr.igrac_id = turn.osvojio_id
+                WHERE igr.${attribute} = $1
+                GROUP BY igr.igrac_id;
+            `;
+            values = [numericSearch];
+        } else {
                 // filtriranje za stringove
                 query = `
                     SELECT igr.*, 
@@ -187,27 +205,33 @@ app.get('/api/tennisPlayers', async (req, res) => { //DOHVAĆANJE FILTRIRANIH RE
         
 
         const result = await pool.query(query, values);
-        res.json(result.rows);
+        res.status(200).json(result.rows);
     } catch (error) {
         console.error('Greška pri dohvaćanju filtriranih podataka (igraca) iz baze:', error);
         res.status(500).send('Greška pri dohvaćanju filtriranih podataka (igraca) iz baze');
     }
 });
 
+
+//POST--------------------------------------------------------------------------------------------------
 app.post('/api/tennisPlayers', async (req, res) => {
     try {
         const {
-            igrac_id, ime, prezime, nacionalnost, godine, visina_cm,
+            ime, prezime, nacionalnost, godine, visina_cm,
             tezina_kg, najvisi_ranking, broj_osvojenih_turnira,
             omiljena_podloga, turniri
         } = req.body;
 
-        // Validate required fields
-        if (!igrac_id || !ime || !prezime || !nacionalnost || !godine ||
+        // Validate required fields except `igrac_id`
+        if (!ime || !prezime || !nacionalnost || !godine ||
             !visina_cm || !tezina_kg || !najvisi_ranking ||
             !broj_osvojenih_turnira || !omiljena_podloga || !Array.isArray(turniri)) {
             return res.status(400).send('Missing required fields or invalid data.');
         }
+
+        // Fetch the maximum existing `igrac_id`
+        const maxIgracIdResult = await pool.query('SELECT MAX(igrac_id) AS max_id FROM igraci');
+        let nextIgracId = (maxIgracIdResult.rows[0].max_id || 0) + 1;
 
         // Insert player into `igraci` table
         const playerQuery = `
@@ -219,11 +243,15 @@ app.post('/api/tennisPlayers', async (req, res) => {
             RETURNING *;
         `;
         const playerValues = [
-            igrac_id, ime, prezime, nacionalnost, godine,
+            nextIgracId, ime, prezime, nacionalnost, godine,
             visina_cm, tezina_kg, najvisi_ranking,
             broj_osvojenih_turnira, omiljena_podloga
         ];
         const playerResult = await pool.query(playerQuery, playerValues);
+
+        // Fetch the maximum existing `turnir_id`
+        const maxTurnirIdResult = await pool.query('SELECT MAX(turnir_id) AS max_id FROM turniri');
+        let nextTurnirId = maxTurnirIdResult.rows[0].max_id || 0;
 
         // Insert associated tournaments into `turniri` table
         const tournamentQuery = `
@@ -233,13 +261,17 @@ app.post('/api/tennisPlayers', async (req, res) => {
         `;
 
         for (const tournament of turniri) {
-            const { turnir_id, naziv, godina, povrsina } = tournament;
+            const { naziv, godina, povrsina } = tournament;
 
-            if (!turnir_id || !naziv || !godina || !povrsina) {
+            // Validate tournament data
+            if (!naziv || !godina || !povrsina) {
                 return res.status(400).send('Invalid tournament data.');
             }
 
-            const tournamentValues = [turnir_id, naziv, godina, povrsina, igrac_id];
+            // Auto-increment turnir_id
+            nextTurnirId++;
+
+            const tournamentValues = [nextTurnirId, naziv, godina, povrsina, nextIgracId];
             await pool.query(tournamentQuery, tournamentValues);
         }
 
@@ -254,6 +286,8 @@ app.post('/api/tennisPlayers', async (req, res) => {
 });
 
 
+
+//PUT--------------------------------------------------------------------------------------------------
 app.put('/api/tennisPlayers/:id', async (req, res) => {
     try {
         const { id } = req.params; // Player ID to update
@@ -293,7 +327,7 @@ app.put('/api/tennisPlayers/:id', async (req, res) => {
     }
 });
 
-
+//DELETE--------------------------------------------------------------------------------------------------
 app.delete('/api/tennisPlayers/:id', async (req, res) => {
     try {
         const { id } = req.params; // Player ID to delete

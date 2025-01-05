@@ -23,13 +23,13 @@
                 <option value="najvisi_ranking">Najvisi rank</option>
                 <option value="broj_osvojenih_turnira">Broj osvojenih turnira</option>
             </select>
-            <button onclick="applyFilter()">Filtriraj</button>
+            <button onclick="applyPlayersFilter()">Filtriraj</button>
         </div>
         <button onclick="downloadJSON()">Preuzmi JSON</button>
         <button onclick="downloadCSV()">Preuzmi CSV</button>
     </div>
 
-    <table id="tennisTable">
+    <table id="playersTable">
         <thead>
             <tr>
                 <th>ID igraca</th>
@@ -60,19 +60,17 @@
                 <option value="godina">Godina</option>
                 <option value="povrsina">Povrsina</option>
             </select>
-            <button onclick="applyTournamentFilter()">Filtriraj</button>
+            <button onclick="applyTournamentsFilter()">Filtriraj</button>
         </div>
     </div>
 
-    <table id="tournamentTable">
+    <table id="tournamentsTable">
         <thead>
             <tr>
                 <th>ID turnira</th>
                 <th>Naziv</th>
                 <th>Godina</th>
-                <th>Povrsina</th>
-                <th>OSVOJIO?</th>
-                
+                <th>Povrsina</th>                
             </tr>
         </thead>
         <tbody></tbody>
@@ -80,7 +78,7 @@
 
     <br/>
 
-    <a href="/">Povrataka na glavnu stranicu</a>
+    <a href="/index.html">Povrataka na glavnu stranicu</a>
 
     <script src="datatable.js"></script>
 

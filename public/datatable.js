@@ -4,10 +4,8 @@ window.onload = () => getAllData();
 async function getAllData() {
     const response = await fetch(`/api/allTennisPlayers`);
     const tennisPlayers = await response.json();
-    
-    const tableBody = document.querySelector("#tennisTable tbody");
+    const tableBody = document.querySelector("#playersTable tbody");
     tableBody.innerHTML = '';
-    
     tennisPlayers.forEach(tennisPlayer => {
         const rowElement = document.createElement("tr");
         rowElement.innerHTML = `
@@ -25,13 +23,28 @@ async function getAllData() {
         `;
         tableBody.appendChild(rowElement);
     });
+
+    const response2 = await fetch(`/api/allTennisTournaments`);
+    const tennisTournaments = await response2.json();
+    const tableBody2 = document.querySelector("#tournamentsTable tbody");
+    tableBody2.innerHTML = '';
+    tennisTournaments.forEach(tennisTournament => {
+        const rowElement = document.createElement("tr");
+        rowElement.innerHTML = `
+            <td>${tennisTournament.turnir_id}</td>
+            <td>${tennisTournament.naziv}</td>
+            <td>${tennisTournament.godina}</td>
+            <td>${tennisTournament.povrsina}</td>
+        `;
+        tableBody2.appendChild(rowElement);
+    });
 }
 
-async function getData(searchTerm = '', attribute = '') {
+async function getPlayersData(searchTerm = '', attribute = '') {
     const response = await fetch(`/api/tennisPlayers?filter=${searchTerm}&attribute=${attribute}`);
     const tennisPlayers = await response.json();
     
-    const tableBody = document.querySelector("#tennisTable tbody");
+    const tableBody = document.querySelector("#playersTable tbody");
     tableBody.innerHTML = '';
     
     tennisPlayers.forEach(tennisPlayer => {
@@ -53,45 +66,34 @@ async function getData(searchTerm = '', attribute = '') {
     });
 }
 
-async function getTournamentData(searchTerm = '', attribute = '') {     //PROMINI
-    const response = await fetch(`/api/tennisPlayers?filter=${searchTerm}&attribute=${attribute}`);
-    const tennisPlayers = await response.json();
+async function getTournamentsData(searchTerm = '', attribute = '') {
+    const response = await fetch(`/api/tennisTournaments?filter=${searchTerm}&attribute=${attribute}`);
+    const tennisTournaments = await response.json();
     
-    const tableBody = document.querySelector("#tennisTable tbody");
+    const tableBody = document.querySelector("#tournamentsTable tbody");
     tableBody.innerHTML = '';
     
-    tennisPlayers.forEach(tennisPlayer => {
+    tennisTournaments.forEach(tennisTournament => {
         const rowElement = document.createElement("tr");
         rowElement.innerHTML = `
-            <td>${tennisPlayer.igrac_id}</td>
-            <td>${tennisPlayer.ime}</td>
-            <td>${tennisPlayer.prezime}</td>
-            <td>${tennisPlayer.nacionalnost}</td>
-            <td>${tennisPlayer.godine}</td>
-            <td>${tennisPlayer.visina_cm}</td>
-            <td>${tennisPlayer.tezina_kg}</td>
-            <td>${tennisPlayer.najvisi_ranking}</td>
-            <td>${tennisPlayer.broj_osvojenih_turnira}</td>
-            <td>${tennisPlayer.omiljena_podloga}</td>
-            <td>${tennisPlayer.Osvojeni_turniri.join(', ')}</td>
+            <td>${tennisTournament.turnir_id}</td>
+            <td>${tennisTournament.naziv}</td>
+            <td>${tennisTournament.godina}</td>
+            <td>${tennisTournament.povrsina}</td>
         `;
         tableBody.appendChild(rowElement);
     });
 }
 
-//funkcija za filtriranje podataka
-function applyFilter() {
+function applyPlayersFilter() {
     const searchTerm = document.getElementById("filter").value;
     const attribute = document.getElementById("attribute").value;
-
-    getData(searchTerm, attribute);
+    getPlayersData(searchTerm, attribute);
 }
-
-function applyTournamentFilter() {
+function applyTournamentsFilter() {
     const searchTerm = document.getElementById("tournamentFilter").value;
     const attribute = document.getElementById("tournamentAttribute").value;
-
-    getTournamentData(searchTerm, attribute);
+    getTournamentsData(searchTerm, attribute);
 }
 
 //funkcija za download u CSV formatu
