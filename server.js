@@ -17,7 +17,6 @@ const pool = new Pool({
 
 //GET--------------------------------------------------------------------------------------------------
 app.get('/api/allTennisPlayers', async (req,res) => {   //DOHVAĆANJE CJELOKUPNE KOLEKCIJE
-    console.log("getting all tennis players")
     try {
         let values = [];
         query = `
@@ -36,7 +35,6 @@ app.get('/api/allTennisPlayers', async (req,res) => {   //DOHVAĆANJE CJELOKUPNE
 })
 
 app.get(`/api/allTennisTournaments`, async (req,res) => { //DOHVAĆANJE SVIH TURNIRA
-    console.log("getting all tennis tournaments")
     try {
         let values = [];
         query = `
@@ -54,7 +52,6 @@ app.get(`/api/allTennisTournaments`, async (req,res) => { //DOHVAĆANJE SVIH TUR
 })
 
 app.get('/api/singleTennisPlayer', async (req,res) => { //DOHVAĆANJE POJEDINAČNOG RESURSA (IGRAČA)
-    console.log("getting a single tennis player by id")
     try {
         const searchTerm = req.query.igrac_id || '';
         const numericTerm = parseInt(searchTerm)
@@ -81,7 +78,6 @@ app.get('/api/singleTennisPlayer', async (req,res) => { //DOHVAĆANJE POJEDINAČ
 })
 
 app.get(`/api/singleTennisTournament`, async (req,res) => { //DOHVAĆANJE POJEDINAČNOG TURNIRA
-    console.log("getting a single tournament by id")
     try {
         const searchTerm = req.query.turnir_id || '';
         const numericTerm = parseInt(searchTerm)
@@ -105,7 +101,6 @@ app.get(`/api/singleTennisTournament`, async (req,res) => { //DOHVAĆANJE POJEDI
 })
 
 app.get(`/api/tennisTournaments`, async (req,res) => { //DOHVAĆANJE FILTRIRANIH TURNIRA
-    console.log("getting filtered tournaments")
     try {
         const searchTerm = req.query.filter || '';
         const attribute = req.query.attribute;
@@ -137,7 +132,6 @@ app.get(`/api/tennisTournaments`, async (req,res) => { //DOHVAĆANJE FILTRIRANIH
 })
 
 app.get('/api/tennisPlayers', async (req, res) => { //DOHVAĆANJE FILTRIRANIH RESURSA
-    console.log("getting filtered tennis players")
     try {
         const searchTerm = req.query.filter || '';
         const attribute = req.query.attribute || 'all';
@@ -226,7 +220,7 @@ app.post('/api/tennisPlayers', async (req, res) => {
         if (!ime || !prezime || !nacionalnost || !godine ||
             !visina_cm || !tezina_kg || !najvisi_ranking ||
             !broj_osvojenih_turnira || !omiljena_podloga || !Array.isArray(turniri)) {
-            return res.status(400).send('Missing required fields or invalid data.');
+            return res.status(400).send('Nedostaju obavezna polja.');
         }
 
         // Fetch the maximum existing `igrac_id`
@@ -265,7 +259,7 @@ app.post('/api/tennisPlayers', async (req, res) => {
 
             // Validate tournament data
             if (!naziv || !godina || !povrsina) {
-                return res.status(400).send('Invalid tournament data.');
+                return res.status(400).send('Pogrešan format turnira.');
             }
 
             // Auto-increment turnir_id
@@ -276,12 +270,12 @@ app.post('/api/tennisPlayers', async (req, res) => {
         }
 
         res.status(201).json({
-            message: 'Player and tournaments added successfully.',
+            message: 'Igrač i turnir dodani uspješno.',
             player: playerResult.rows[0]
         });
     } catch (error) {
-        console.error('Error adding player and tournaments:', error);
-        res.status(500).send('Error adding player and tournaments.');
+        console.error('Pogreška u dodavanju igrača i turnira:', error);
+        res.status(500).send('Pogreška u dodavanju igrača i turnira.');
     }
 });
 
@@ -290,24 +284,22 @@ app.post('/api/tennisPlayers', async (req, res) => {
 //PUT--------------------------------------------------------------------------------------------------
 app.put('/api/tennisPlayers/:id', async (req, res) => {
     try {
-        const { id } = req.params; // Player ID to update
-        const { field, value } = req.body; // Field to update and new value
+        const { id } = req.params; 
+        const { field, value } = req.body; 
 
-        // Validate input
         const validFields = [
             'ime', 'prezime', 'nacionalnost', 'omiljena_podloga', 'godine',
             'visina_cm', 'tezina_kg', 'najvisi_ranking', 'broj_osvojenih_turnira'
         ];
 
         if (!validFields.includes(field)) {
-            return res.status(400).send('Invalid field for update.');
+            return res.status(400).send('Pogrešno polje za ažuriranje.');
         }
 
         if (value === undefined) {
-            return res.status(400).send('New value for the field is required.');
+            return res.status(400).send('Potrebna je nova vrijednost za ažuriranje.');
         }
 
-        // Update query
         const query = `
             UPDATE igraci
             SET ${field} = $1
@@ -317,29 +309,27 @@ app.put('/api/tennisPlayers/:id', async (req, res) => {
         const result = await pool.query(query, [value, id]);
 
         if (result.rowCount === 0) {
-            return res.status(404).send('Player not found.');
+            return res.status(404).send('Igrač nije pronađen.');
         }
 
-        res.status(200).json(result.rows[0]); // Respond with the updated player
+        res.status(200).json(result.rows[0]);
     } catch (error) {
-        console.error('Error while updating player:', error);
-        res.status(500).send('Error while updating player.');
+        console.error('Pogreška u ažuriranju igrača:', error);
+        res.status(500).send('Pogreška u ažuriranju igrača.');
     }
 });
 
 //DELETE--------------------------------------------------------------------------------------------------
 app.delete('/api/tennisPlayers/:id', async (req, res) => {
     try {
-        const { id } = req.params; // Player ID to delete
+        const { id } = req.params;
 
-        // Delete tournaments associated with the player
         const deleteTournamentsQuery = `
             DELETE FROM turniri
             WHERE osvojio_id = $1;
         `;
         await pool.query(deleteTournamentsQuery, [id]);
 
-        // Delete the player
         const deletePlayerQuery = `
             DELETE FROM igraci
             WHERE igrac_id = $1
@@ -348,16 +338,15 @@ app.delete('/api/tennisPlayers/:id', async (req, res) => {
         const result = await pool.query(deletePlayerQuery, [id]);
 
         if (result.rowCount === 0) {
-            return res.status(404).send('Player not found.');
+            return res.status(404).send('Igrač nije nađen.');
         }
 
-        res.status(200).send('Player and associated tournaments deleted successfully.');
+        res.status(200).send('Igrač i povezani turnir uspješno izbrisani.');
     } catch (error) {
-        console.error('Error while deleting player:', error);
-        res.status(500).send('Error while deleting player.');
+        console.error('Pogreška prilikom brisanja igrača:', error);
+        res.status(500).send('Pogreška prilikom brisanja igrača.');
     }
 });
 
 
-// Pokretanje servera
 app.listen(port);

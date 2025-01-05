@@ -16,14 +16,13 @@ document.getElementById('addTournament').addEventListener('click', function () {
     `;
     tournamentsList.appendChild(tournamentDiv);
 
-    // Add event listener for remove button
     tournamentDiv.querySelector('.removeTournament').addEventListener('click', function () {
         tournamentsList.removeChild(tournamentDiv);
     });
 });
 
 document.getElementById('addPlayerForm').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Prevent the form from reloading the page
+    event.preventDefault(); 
 
     const playerData = {
         ime: document.getElementById('ime').value,
@@ -38,7 +37,6 @@ document.getElementById('addPlayerForm').addEventListener('submit', async functi
         turniri: [],
     };
 
-    // Collect tournaments
     const tournamentsDivs = document.querySelectorAll('.tournament');
     tournamentsDivs.forEach((div) => {
         const naziv = div.querySelector('input[name="naziv"]').value;

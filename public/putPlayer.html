@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ažuriranje igrača</title>
+</head>
+<body>
+    <h1>Ažuriraj igrača</h1>
+    
+    <form id="updatePlayerForm">
+        <label for="igrac_id">ID igrača:</label>
+        <input type="number" id="igrac_id" name="igrac_id" required>
+        <br><br>
+        
+        <label for="attribute">Odabir atributa:</label>
+        <select id="attribute" name="attribute" required>
+            <option value="ime">Ime</option>
+            <option value="prezime">Prezime</option>
+            <option value="nacionalnost">Nacionalnost</option>
+            <option value="godine">Godine</option>
+            <option value="visina_cm">Visina (cm)</option>
+            <option value="tezina_kg">Težina (kg)</option>
+            <option value="najvisi_ranking">Najviši ranking</option>
+            <option value="broj_osvojenih_turnira">Broj osvojenih turnira</option>
+            <option value="omiljena_podloga">Omiljena podloga</option>
+        </select>
+        <br><br>
+        
+        <label for="newValue">Nova vrijednost:</label>
+        <input type="text" id="newValue" name="newValue" required>
+        <br><br>
+        
+        <button type="submit">Ažuriraj igrača</button>
+    </form>
+    
+    <p id="responseMessage"></p>
+    
+    <br/>
+
+    <a href="/index.html">Povrataka na glavnu stranicu</a>
+    
+    <script src="putPlayer.js"></script>
+</body>
+</html>

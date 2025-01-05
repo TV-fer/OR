@@ -1,0 +1,345 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "API za tenis",
+        "version": "1.0.0",
+        "description": "API za upravljanje podacima o tenisačima i turnirima",
+        "contact": {
+            "name": "Toni Vanjak",
+            "email": "example@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "paths": {
+        "/api/allTennisPlayers": {
+            "get": {
+                "summary": "Dohvati sve tenis igrače",
+                "description": "Vraća sve tenis igrače zajedno s osvojenim turnirima.",
+                "responses": {
+                    "200": {
+                        "description": "Popis tenis igrača",
+                        "content": {
+                            "application/json": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/TennisPlayer"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Greška pri dohvaćanju podataka"
+                    }
+                }
+            }
+        },
+        "/api/allTennisTournaments": {
+            "get": {
+                "summary": "Dohvati sve tenis turnire",
+                "description": "Vraća popis svih tenis turnira.",
+                "responses": {
+                    "200": {
+                        "description": "Popis tenis turnira",
+                        "content": {
+                            "application/json": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/TennisTournament"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Greška pri dohvaćanju podataka"
+                    }
+                }
+            }
+        },
+        "/api/singleTennisPlayer": {
+            "get": {
+                "summary": "Dohvati tenis igrača prema ID-u",
+                "description": "Vraća tenis igrača na temelju zadanog ID-a.",
+                "parameters": [
+                    {
+                        "name": "igrac_id",
+                        "in": "query",
+                        "description": "ID tenis igrača",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Podaci o tenis igraču",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/TennisPlayer"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Igrač nije pronađen"
+                    },
+                    "500": {
+                        "description": "Greška pri dohvaćanju podataka"
+                    }
+                }
+            }
+        },
+        "/api/singleTennisTournament": {
+            "get": {
+                "summary": "Dohvati tenis turnir prema ID-u",
+                "description": "Vraća tenis turnir na temelju zadanog ID-a.",
+                "parameters": [
+                    {
+                        "name": "turnir_id",
+                        "in": "query",
+                        "description": "ID tenis turnira",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Podaci o tenis turniru",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/TennisTournament"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Turnir nije pronađen"
+                    },
+                    "500": {
+                        "description": "Greška pri dohvaćanju podataka"
+                    }
+                }
+            }
+        },
+        "/api/tennisPlayers": {
+            "get": {
+                "summary": "Filtriraj tenis igrače",
+                "description": "Vraća filtrirane tenis igrače prema određenim kriterijima.",
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtriraj po imenu, prezimenu, nacionalnosti itd.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "attribute",
+                        "in": "query",
+                        "description": "Atribut po kojem se filtrira",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filtrirani popis tenis igrača",
+                        "content": {
+                            "application/json": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/TennisPlayer"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Greška pri dohvaćanju filtriranih podataka"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Dodaj novog tenis igrača",
+                "description": "Dodaje novog tenis igrača u sustav.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TennisPlayer"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Igrač uspješno dodan",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/TennisPlayer"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Pogrešan zahtjev (nedostajući podaci ili netočan format)"
+                    },
+                    "500": {
+                        "description": "Greška pri dodavanju tenis igrača"
+                    }
+                }
+            }
+        },
+        "/api/tennisPlayers/{id}": {
+            "put": {
+                "summary": "Ažuriraj tenis igrača",
+                "description": "Ažurira podatke tenis igrača na temelju ID-a.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID tenis igrača",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TennisPlayerUpdate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ažurirani podaci tenis igrača",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/TennisPlayer"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Pogrešno polje za ažuriranje"
+                    },
+                    "404": {
+                        "description": "Igrač nije pronađen"
+                    },
+                    "500": {
+                        "description": "Greška pri ažuriranju"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Obriši tenis igrača",
+                "description": "Briše tenis igrača na temelju ID-a.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID tenis igrača",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Igrač uspješno obrisan"
+                    },
+                    "404": {
+                        "description": "Igrač nije pronađen"
+                    },
+                    "500": {
+                        "description": "Greška pri brisanju"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TennisPlayer": {
+                "type": "object",
+                "properties": {
+                    "igrac_id": {
+                        "type": "integer"
+                    },
+                    "ime": {
+                        "type": "string"
+                    },
+                    "prezime": {
+                        "type": "string"
+                    },
+                    "nacionalnost": {
+                        "type": "string"
+                    },
+                    "godine": {
+                        "type": "integer"
+                    },
+                    "visina_cm": {
+                        "type": "integer"
+                    },
+                    "tezina_kg": {
+                        "type": "integer"
+                    },
+                    "najvisi_ranking": {
+                        "type": "integer"
+                    },
+                    "broj_osvojenih_turnira": {
+                        "type": "integer"
+                    },
+                    "omiljena_podloga": {
+                        "type": "string"
+                    },
+                    "Osvojeni_turniri": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "TennisTournament": {
+                "type": "object",
+                "properties": {
+                    "turnir_id": {
+                        "type": "integer"
+                    },
+                    "naziv": {
+                        "type": "string"
+                    },
+                    "godina": {
+                        "type": "integer"
+                    },
+                    "povrsina": {
+                        "type": "string"
+                    }
+                }
+            },
+            "TennisPlayerUpdate": {
+                "type": "object",
+                "properties": {
+                    "field": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

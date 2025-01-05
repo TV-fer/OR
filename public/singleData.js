@@ -41,7 +41,7 @@ async function displayAllData() {
 //-----------------------------------------------------------------------------------------------
 function displayPlayerData(tennisPlayer) {
     if (tennisPlayer) {
-        console.log("Player found:", tennisPlayer);
+        console.log("Igrač nađen:", tennisPlayer);
         const tableBody = document.querySelector("#singlePlayerTable tbody");
         tableBody.innerHTML = '';
         const rowElement = document.createElement("tr");
@@ -60,7 +60,7 @@ function displayPlayerData(tennisPlayer) {
         `;
     tableBody.appendChild(rowElement);
     } else {
-        console.log("No player found.");
+        console.log("Nije nađen traženi igrač.");
         const tableBody = document.querySelector("#singlePlayerTable tbody");
         tableBody.innerHTML = '';
     }
@@ -68,7 +68,7 @@ function displayPlayerData(tennisPlayer) {
 
 function displayTournamentData(tennisTournament) {
     if (tennisTournament) {
-        console.log("Tournament found:", tennisTournament);
+        console.log("Turnir nađen:", tennisTournament);
         const tableBody = document.querySelector("#singleTournamentTable tbody");
         tableBody.innerHTML = '';
         const rowElement = document.createElement("tr");
@@ -80,7 +80,7 @@ function displayTournamentData(tennisTournament) {
         `;
         tableBody.appendChild(rowElement);
     } else {
-        console.log("No tournament found.");
+        console.log("Nema traženog turnira.");
         const tableBody = document.querySelector("#singleTournamentTable tbody");
         tableBody.innerHTML = '';
     }
@@ -93,16 +93,16 @@ async function applyPlayerIdFilter() {
         const response = await fetch(`/api/singleTennisPlayer?igrac_id=${attribute}`);
         if (response.ok) {
             const tennisPlayer = await response.json();
-            displayPlayerData(tennisPlayer); // Pass the fetched data
+            displayPlayerData(tennisPlayer); 
         } else if (response.status === 404) {
-            displayPlayerData(null); // Pass `null` to indicate no data was found
+            displayPlayerData(null);
         } else {
-            console.error('Unexpected error:', response.statusText);
-            displayPlayerData(null); // Pass `null` in case of an unexpected issue
+            console.error('Neočekivana greška:', response.statusText);
+            displayPlayerData(null);
         }
     } catch (error) {
-        console.error('Error fetching player data:', error);
-        displayPlayerData(null); // Pass `null` in case of a network error or exception
+        console.error('Greška u dohvatu podataka o igraču:', error);
+        displayPlayerData(null); 
     }
 }
 
@@ -113,15 +113,15 @@ async function applyTournamentIdFilter() {
         const response = await fetch(`/api/singleTennisTournament?turnir_id=${attribute}`);
         if (response.ok) {
             const tennisTournament = await response.json();
-            displayTournamentData(tennisTournament); // Pass the fetched data
+            displayTournamentData(tennisTournament); 
         } else if (response.status === 404) {
-            displayTournamentData(null); // Pass `null` to indicate no data was found
+            displayTournamentData(null); 
         } else {
-            console.error('Unexpected error:', response.statusText);
-            displayTournamentData(null); // Pass `null` in case of an unexpected issue
+            console.error('Neočekivana greška:', response.statusText);
+            displayTournamentData(null);
         }
     } catch (error) {
-        console.error('Error fetching tournament data:', error);
-        displayTournamentData(null); // Pass `null` in case of a network error or exception
+        console.error('Greška u dohvatu podataka o turniru:', error);
+        displayTournamentData(null); 
     }
 }
