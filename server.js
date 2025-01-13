@@ -152,7 +152,7 @@ app.get('/api/allTennisPlayers', async (req,res) => {   //DOHVAĆANJE CJELOKUPNE
                 "tezina_kg": "weight",            // Težina u kilogramima
                 "omiljena_podloga": "favoriteSurface",  
                 "osvojeni_turniri": "hasWon",     // Osvojeni turniri
-                "igrac_id": "playerId",           
+                "igrac_id": "identifier",           
                 "najvisi_ranking": "highestRanking",  
                 "broj_osvojenih_turnira": "numberOfTitles" 
             },
@@ -167,7 +167,7 @@ app.get('/api/allTennisPlayers', async (req,res) => {   //DOHVAĆANJE CJELOKUPNE
                 "weight": `${player.tezina_kg} kg`,      // Težina
                 "favoriteSurface": player.omiljena_podloga, 
                 "hasWon": player.osvojeni_turniri,       // Osvojeni turniri (može biti niz)
-                "playerId": player.igrac_id,             
+                "identifier": player.igrac_id,             
                 "highestRanking": player.najvisi_ranking, 
                 "numberOfTitles": player.broj_osvojenih_turnira 
             }))
@@ -240,7 +240,7 @@ app.get('/api/singleTennisPlayer', async (req,res) => { //DOHVAĆANJE POJEDINAČ
                     "tezina_kg": "weight",            // Težina u kilogramima
                     "omiljena_podloga": "favoriteSurface",  
                     "osvojeni_turniri": "hasWon",     // Osvojeni turniri
-                    "igrac_id": "playerId",           
+                    "igrac_id": "identifier",           
                     "najvisi_ranking": "highestRanking",  
                     "broj_osvojenih_turnira": "numberOfTitles"
                 },
@@ -253,7 +253,7 @@ app.get('/api/singleTennisPlayer', async (req,res) => { //DOHVAĆANJE POJEDINAČ
                     "weight": `${result.rows[0].tezina_kg} kg`,      // Težina
                     "favoriteSurface": result.rows[0].omiljena_podloga, 
                     "hasWon": result.rows[0].osvojeni_turniri,       // Osvojeni turniri (može biti niz)
-                    "playerId": result.rows[0].igrac_id,             
+                    "identifier": result.rows[0].igrac_id,             
                     "highestRanking": result.rows[0].najvisi_ranking, 
                     "numberOfTitles": result.rows[0].broj_osvojenih_turnira 
             };
@@ -431,7 +431,7 @@ app.get('/api/tennisPlayers', async (req, res) => { //DOHVAĆANJE FILTRIRANIH RE
                 "tezina_kg": "weight",            // Težina u kilogramima
                 "omiljena_podloga": "favoriteSurface",  
                 "osvojeni_turniri": "hasWon",     // Osvojeni turniri
-                "igrac_id": "playerId",           
+                "igrac_id": "identifier",           
                 "najvisi_ranking": "highestRanking",  
                 "broj_osvojenih_turnira": "numberOfTitles" 
             },
@@ -446,7 +446,7 @@ app.get('/api/tennisPlayers', async (req, res) => { //DOHVAĆANJE FILTRIRANIH RE
                 "weight": `${player.tezina_kg} kg`,      // Težina
                 "favoriteSurface": player.omiljena_podloga, 
                 "hasWon": player.osvojeni_turniri,       // Osvojeni turniri (može biti niz)
-                "playerId": player.igrac_id,             
+                "identifier": player.igrac_id,             
                 "highestRanking": player.najvisi_ranking, 
                 "numberOfTitles": player.broj_osvojenih_turnira 
             }))
@@ -522,9 +522,31 @@ app.post('/api/tennisPlayers', async (req, res) => {
             await pool.query(tournamentQuery, tournamentValues);
         }
 
+        // Prepare response in JSON-LD format
+        const responseJsonLd = {
+            "@context": "http://schema.org/",
+            "@type": "Person",
+            "identifier": nextIgracId,
+            "givenName": ime,
+            "familyName": prezime,
+            "nationality": nacionalnost,
+            "age": godine,
+            "height": `${visina_cm} cm`,
+            "weight": `${tezina_kg} kg`,
+            "favoriteSurface": omiljena_podloga,
+            "numberOfTitles": broj_osvojenih_turnira,
+            "highestRanking": najvisi_ranking,
+            "tournaments": turniri.map(tournament => ({
+                "@type": "SportsEvent",
+                "name": tournament.naziv,
+                "startDate": tournament.godina,
+                "surface": tournament.povrsina
+            }))
+        };
+
         res.status(201).json({
             message: 'Igrač i turnir dodani uspješno.',
-            player: playerResult.rows[0]
+            player: responseJsonLd
         });
     } catch (error) {
         console.error('Pogreška u dodavanju igrača i turnira:', error);
@@ -565,7 +587,24 @@ app.put('/api/tennisPlayers/:id', async (req, res) => {
             return res.status(404).send('Igrač nije pronađen.');
         }
 
-        res.status(200).json(result.rows[0]);
+        // Prepare response in JSON-LD format
+        const updatedPlayer = result.rows[0];
+        const responseJsonLd = {
+            "@context": "http://schema.org/",
+            "@type": "Person",
+            "identifier": updatedPlayer.igrac_id,
+            "givenName": updatedPlayer.ime,
+            "familyName": updatedPlayer.prezime,
+            "nationality": updatedPlayer.nacionalnost,
+            "age": updatedPlayer.godine,
+            "height": `${updatedPlayer.visina_cm} cm`,
+            "weight": `${updatedPlayer.tezina_kg} kg`,
+            "favoriteSurface": updatedPlayer.omiljena_podloga,
+            "numberOfTitles": updatedPlayer.broj_osvojenih_turnira,
+            "highestRanking": updatedPlayer.najvisi_ranking
+        };
+
+        res.status(200).json(responseJsonLd);
     } catch (error) {
         console.error('Pogreška u ažuriranju igrača:', error);
         res.status(500).send('Pogreška u ažuriranju igrača.');

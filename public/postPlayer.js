@@ -36,6 +36,7 @@ document.getElementById('addPlayerForm').addEventListener('submit', async functi
         omiljena_podloga: document.getElementById('omiljena_podloga').value,
         turniri: [],
     };
+    
 
     const tournamentsDivs = document.querySelectorAll('.tournament');
     tournamentsDivs.forEach((div) => {
@@ -53,7 +54,7 @@ document.getElementById('addPlayerForm').addEventListener('submit', async functi
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: playerData,
+            body: JSON.stringify(playerData),
         });
 
         if (response.ok) {

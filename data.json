@@ -108,18 +108,6 @@
     "omiljena_podloga": "Zemlja"
   },
   {
-    "igrac_id": 1,
-    "ime": "NoviNole",
-    "prezime": "Đoković",
-    "nacionalnost": "Srbija",
-    "godine": 36,
-    "visina_cm": 188,
-    "tezina_kg": 77,
-    "najvisi_ranking": 1,
-    "broj_osvojenih_turnira": 95,
-    "omiljena_podloga": "Tvrda"
-  },
-  {
     "igrac_id": 12,
     "ime": "ToniToni",
     "prezime": "Vade",
@@ -238,5 +226,29 @@
     "najvisi_ranking": 123,
     "broj_osvojenih_turnira": 123,
     "omiljena_podloga": "Zemlja"
+  },
+  {
+    "igrac_id": 22,
+    "ime": "w",
+    "prezime": "w",
+    "nacionalnost": "w",
+    "godine": 1,
+    "visina_cm": 1,
+    "tezina_kg": 1,
+    "najvisi_ranking": 1,
+    "broj_osvojenih_turnira": 1,
+    "omiljena_podloga": "Zemlja"
+  },
+  {
+    "igrac_id": 1,
+    "ime": "Nole",
+    "prezime": "Đoković",
+    "nacionalnost": "Srbija",
+    "godine": 36,
+    "visina_cm": 188,
+    "tezina_kg": 77,
+    "najvisi_ranking": 1,
+    "broj_osvojenih_turnira": 95,
+    "omiljena_podloga": "Tvrda"
   }
 ]
