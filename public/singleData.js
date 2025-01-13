@@ -12,17 +12,17 @@ async function displayAllData() {
     tableBody.innerHTML = '';
     const rowElement = document.createElement("tr");
     rowElement.innerHTML = `
-            <td>${tennisPlayer.playerId || ''}</td>
-            <td>${tennisPlayer.givenName}</td>
-            <td>${tennisPlayer.familyName}</td>
-            <td>${tennisPlayer.nationality}</td>
-            <td>${tennisPlayer.age}</td>
-            <td>${tennisPlayer.height}</td>
-            <td>${tennisPlayer.weight}</td>
-            <td>${tennisPlayer.najvisi_ranking || ''}</td>
-            <td>${tennisPlayer.broj_osvojenih_turnira || ''}</td>
-            <td>${tennisPlayer.favoriteSurface}</td>
-            <td>${tennisPlayer.hasWon ? tennisPlayer.hasWon.join(', ') : ''}</td>
+            <td>${tennisPlayer.additionalProperty[3].value}</td>
+            <td>${tennisPlayer.ime}</td>
+            <td>${tennisPlayer.prezime}</td>
+            <td>${tennisPlayer.nacionalnost}</td>
+            <td>${tennisPlayer.additionalProperty[0].value}</td>
+            <td>${tennisPlayer.visina_cm}</td>
+            <td>${tennisPlayer.tezina_kg}</td>
+            <td>${tennisPlayer.additionalProperty[4].value}</td>
+            <td>${tennisPlayer.additionalProperty[5].value}</td>
+            <td>${tennisPlayer.additionalProperty[1].value}</td>
+            <td>${tennisPlayer.additionalProperty[2].value.join(', ') ? tennisPlayer.additionalProperty[2].value.join(', ') : ""}</td>
         `;
     tableBody.appendChild(rowElement);
 
@@ -30,10 +30,10 @@ async function displayAllData() {
     tableBody2.innerHTML = '';
     const rowElement2 = document.createElement("tr");
     rowElement.innerHTML = `
-            <td>${tennisTournament.playerId || ''}</td>  <!-- turnir_id -->
-            <td>${tennisTournament.name}</td>             <!-- naziv -->
-            <td>${tennisTournament.startDate}</td>        <!-- godina -->
-            <td>${tennisTournament.location?.surface || ''}</td> <!-- povrsina -->
+            <td>${tennisTournament.additionalProperty[0].value}</td>
+            <td>${tennisTournament.naziv}</td>
+            <td>${tennisTournament.godina}</td>
+            <td>${tennisTournament.additionalProperty[1].value}</td>
         `;
     tableBody2.appendChild(rowElement2);
 }
@@ -46,17 +46,17 @@ function displayPlayerData(tennisPlayer) {
         tableBody.innerHTML = '';
         const rowElement = document.createElement("tr");
         rowElement.innerHTML = `
-            <td>${tennisPlayer.igrac_id || ''}</td>
-            <td>${tennisPlayer.givenName}</td>
-            <td>${tennisPlayer.familyName}</td>
-            <td>${tennisPlayer.nationality}</td>
-            <td>${tennisPlayer.age}</td>
-            <td>${tennisPlayer.height}</td>
-            <td>${tennisPlayer.weight}</td>
-            <td>${tennisPlayer.najvisi_ranking || ''}</td>
-            <td>${tennisPlayer.broj_osvojenih_turnira || ''}</td>
-            <td>${tennisPlayer.favoriteSurface}</td>
-            <td>${tennisPlayer.hasWon ? tennisPlayer.hasWon.join(', ') : ''}</td>
+            <td>${tennisPlayer.additionalProperty[3].value}</td>
+            <td>${tennisPlayer.ime}</td>
+            <td>${tennisPlayer.prezime}</td>
+            <td>${tennisPlayer.nacionalnost}</td>
+            <td>${tennisPlayer.additionalProperty[0].value}</td>
+            <td>${tennisPlayer.visina_cm}</td>
+            <td>${tennisPlayer.tezina_kg}</td>
+            <td>${tennisPlayer.additionalProperty[4].value}</td>
+            <td>${tennisPlayer.additionalProperty[5].value}</td>
+            <td>${tennisPlayer.additionalProperty[1].value}</td>
+            <td>${tennisPlayer.additionalProperty[2].value.join(', ') ? tennisPlayer.additionalProperty[2].value.join(', ') : ""}</td>
         `;
     tableBody.appendChild(rowElement);
     } else {
@@ -73,10 +73,10 @@ function displayTournamentData(tennisTournament) {
         tableBody.innerHTML = '';
         const rowElement = document.createElement("tr");
         rowElement.innerHTML = `
-            <td>${tennisTournament.turnir_id || ''}</td>  <!-- turnir_id -->
-            <td>${tennisTournament.name}</td>             <!-- naziv -->
-            <td>${tennisTournament.startDate}</td>        <!-- godina -->
-            <td>${tennisTournament.location?.surface || ''}</td> <!-- povrsina -->
+            <td>${tennisTournament.additionalProperty[0].value}</td>
+            <td>${tennisTournament.naziv}</td>
+            <td>${tennisTournament.godina}</td>
+            <td>${tennisTournament.additionalProperty[1].value}</td>
         `;
         tableBody.appendChild(rowElement);
     } else {

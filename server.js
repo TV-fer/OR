@@ -108,10 +108,10 @@ app.get('/refresh-data', checkAuthentication, async (req, res) => {
     const data = result.rows;
 
     const fs = require('fs');
-    fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
+    fs.writeFileSync('./public/data.json', JSON.stringify(data, null, 2));
 
     const csvData = data.map(row => Object.values(row).join(',')).join('\n');
-    fs.writeFileSync('data.csv', csvData);
+    fs.writeFileSync('./public/data.csv', csvData);
 
     res.send('<h1>Podaci su osvježeni</h1><a href="/profile">Povratak na profil</a>');
   } catch (error) {
@@ -147,32 +147,52 @@ app.get('/api/allTennisPlayers', async (req,res) => {   //DOHVAĆANJE CJELOKUPNE
                 "ime": "givenName",               // Ime igrača
                 "prezime": "familyName",          // Prezime igrača
                 "nacionalnost": "nationality",    // Nacionalnost
-                "godine": "age",                  // Godine
                 "visina_cm": "height",            // Visina u centimetrima
-                "tezina_kg": "weight",            // Težina u kilogramima
-                "omiljena_podloga": "favoriteSurface",  
-                "osvojeni_turniri": "hasWon",     // Osvojeni turniri
-                "igrac_id": "identifier",           
-                "najvisi_ranking": "highestRanking",  
-                "broj_osvojenih_turnira": "numberOfTitles" 
+                "tezina_kg": "weight"             // Težina u kilogramima
             },
             "@type": "ItemList",
             "itemListElement": result.rows.map(player => ({
-                "@type": "Person",                       // Tip objekta
-                "givenName": player.ime,                 // Ime
-                "familyName": player.prezime,            // Prezime
-                "nationality": player.nacionalnost,      // Nacionalnost
-                "age": player.godine,                    // Godine
-                "height": `${player.visina_cm} cm`,      // Visina
-                "weight": `${player.tezina_kg} kg`,      // Težina
-                "favoriteSurface": player.omiljena_podloga, 
-                "hasWon": player.osvojeni_turniri,       // Osvojeni turniri (može biti niz)
-                "identifier": player.igrac_id,             
-                "highestRanking": player.najvisi_ranking, 
-                "numberOfTitles": player.broj_osvojenih_turnira 
+                "@type": "Person",
+                "ime": player.ime,
+                "prezime": player.prezime,
+                "nacionalnost": player.nacionalnost,
+                "visina_cm": `${player.visina_cm} cm`,
+                "tezina_kg": `${player.tezina_kg} kg`,
+                "additionalProperty": [
+                    {
+                        "@type": "PropertyValue",
+                        "name": "godine",
+                        "value": player.godine
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "omiljena_podloga",
+                        "value": player.omiljena_podloga
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "osvojeni_turniri",
+                        "value": player.Osvojeni_turniri
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "igrac_id",
+                        "value": player.igrac_id
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "najvisi_ranking",
+                        "value": player.najvisi_ranking
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "broj_osvojenih_turnira",
+                        "value": player.broj_osvojenih_turnira
+                    }
+                ]
             }))
         };
-
+        
         res.status(200).json(players);
     } catch (error) {
         console.error('Greška pri dohvaćanju svih podataka iz baze:', error);
@@ -192,20 +212,32 @@ app.get(`/api/allTennisTournaments`, async (req,res) => { //DOHVAĆANJE SVIH TUR
         const result = await pool.query(query, values);
         // Dodavanje JSON-LD
         const tournaments = {
-            "@context": "http://schema.org/",
+            "@context": {
+                "vocab": "http://schema.org/",
+                "naziv": "name",
+                "godina": "startDate"
+            },
             "@type": "ItemList",
             "itemListElement": result.rows.map(tournament => ({
                 "@type": "SportsEvent",
-                "tournamentId": tournament.turnir_id,
-                "name": tournament.naziv,
-                "startDate": tournament.godina,
-                "sport": "Tennis",
-                "location": {
-                    "@type": "Place",
-                    "surface": tournament.povrsina
-                }
+                "naziv": tournament.naziv,
+                "godina": tournament.godina,
+                "additionalProperty": [
+                    {
+                        "@type": "PropertyValue",
+                        "name": "turnir_id",
+                        "value": tournament.turnir_id
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "povrsina",
+                        "value": tournament.povrsina
+                    }
+                ]
             }))
         };
+        
+        
         res.status(200).json(tournaments);
     } catch (error) {
         console.log('Greška pri dohvaćanju svih turnira iz baze:', error);
@@ -235,27 +267,49 @@ app.get('/api/singleTennisPlayer', async (req,res) => { //DOHVAĆANJE POJEDINAČ
                     "ime": "givenName",               // Ime igrača
                     "prezime": "familyName",          // Prezime igrača
                     "nacionalnost": "nationality",    // Nacionalnost
-                    "godine": "age",                  // Godine
                     "visina_cm": "height",            // Visina u centimetrima
-                    "tezina_kg": "weight",            // Težina u kilogramima
-                    "omiljena_podloga": "favoriteSurface",  
-                    "osvojeni_turniri": "hasWon",     // Osvojeni turniri
-                    "igrac_id": "identifier",           
-                    "najvisi_ranking": "highestRanking",  
-                    "broj_osvojenih_turnira": "numberOfTitles"
+                    "tezina_kg": "weight"             // Težina u kilogramima
                 },
-                "@type": "Person",                       // Tip objekta
-                    "givenName": result.rows[0].ime,                 // Ime
-                    "familyName": result.rows[0].prezime,            // Prezime
-                    "nationality": result.rows[0].nacionalnost,      // Nacionalnost
-                    "age": result.rows[0].godine,                    // Godine
-                    "height": `${result.rows[0].visina_cm} cm`,      // Visina
-                    "weight": `${result.rows[0].tezina_kg} kg`,      // Težina
-                    "favoriteSurface": result.rows[0].omiljena_podloga, 
-                    "hasWon": result.rows[0].osvojeni_turniri,       // Osvojeni turniri (može biti niz)
-                    "identifier": result.rows[0].igrac_id,             
-                    "highestRanking": result.rows[0].najvisi_ranking, 
-                    "numberOfTitles": result.rows[0].broj_osvojenih_turnira 
+                "@type": "Person",
+                    "@type": "Person",
+                    "ime": result.rows[0].ime,
+                    "prezime": result.rows[0].prezime,
+                    "nacionalnost": result.rows[0].nacionalnost,
+                    "visina_cm": `${result.rows[0].visina_cm} cm`,
+                    "tezina_kg": `${result.rows[0].tezina_kg} kg`,
+                    "additionalProperty": [
+                        {
+                            "@type": "PropertyValue",
+                            "name": "godine",
+                            "value": result.rows[0].godine
+                        },
+                        {
+                            "@type": "PropertyValue",
+                            "name": "omiljena_podloga",
+                            "value": result.rows[0].omiljena_podloga
+                        },
+                        {
+                            "@type": "PropertyValue",
+                            "name": "osvojeni_turniri",
+                            "value": result.rows[0].Osvojeni_turniri
+                        },
+                        {
+                            "@type": "PropertyValue",
+                            "name": "igrac_id",
+                            "value": result.rows[0].igrac_id
+                        },
+                        {
+                            "@type": "PropertyValue",
+                            "name": "najvisi_ranking",
+                            "value": result.rows[0].najvisi_ranking
+                        },
+                        {
+                            "@type": "PropertyValue",
+                            "name": "broj_osvojenih_turnira",
+                            "value": result.rows[0].broj_osvojenih_turnira
+                        }
+                    ]
+                
             };
             
             res.status(200).json(player);
@@ -282,16 +336,26 @@ app.get(`/api/singleTennisTournament`, async (req,res) => { //DOHVAĆANJE POJEDI
         const result = await pool.query(query, values);
         if (result.rows.length > 0) {
             const tournament = {
-                "@context": "http://schema.org/",
+                "@context": {
+                    "vocab": "http://schema.org/",
+                    "naziv": "name",
+                    "godina": "startDate"
+                },
                 "@type": "SportsEvent",
-                "tournamentId": result.rows[0].turnir_id,
-                "name": result.rows[0].naziv,
-                "startDate": result.rows[0].godina,
-                "sport": "Tennis",
-                "location": {
-                    "@type": "Place",
-                    "surface": result.rows[0].povrsina
-                }
+                "naziv": result.rows[0].naziv,
+                "godina": result.rows[0].godina,
+                "additionalProperty": [
+                    {
+                        "@type": "PropertyValue",
+                        "name": "turnir_id",
+                        "value": result.rows[0].turnir_id
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "povrsina",
+                        "value": result.rows[0].povrsina
+                    }
+                ]
             };
 
             res.status(200).json(tournament);
@@ -329,18 +393,28 @@ app.get(`/api/tennisTournaments`, async (req,res) => { //DOHVAĆANJE FILTRIRANIH
         }
         const result = await pool.query(query, values);
         const tournaments = {
-            "@context": "http://schema.org/",
+            "@context": {
+                "vocab": "http://schema.org/",
+                "naziv": "name",
+                "godina": "startDate"
+            },
             "@type": "ItemList",
             "itemListElement": result.rows.map(tournament => ({
                 "@type": "SportsEvent",
-                "tournamentId": tournament.turnir_id,
-                "name": tournament.naziv,
-                "startDate": tournament.godina,
-                "sport": "Tennis",
-                "location": {
-                    "@type": "Place",
-                    "surface": tournament.povrsina
-                }
+                "naziv": tournament.naziv,
+                "godina": tournament.godina,
+                "additionalProperty": [
+                    {
+                        "@type": "PropertyValue",
+                        "name": "turnir_id",
+                        "value": tournament.turnir_id
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "povrsina",
+                        "value": tournament.povrsina
+                    }
+                ]
             }))
         };
 
@@ -426,29 +500,49 @@ app.get('/api/tennisPlayers', async (req, res) => { //DOHVAĆANJE FILTRIRANIH RE
                 "ime": "givenName",               // Ime igrača
                 "prezime": "familyName",          // Prezime igrača
                 "nacionalnost": "nationality",    // Nacionalnost
-                "godine": "age",                  // Godine
                 "visina_cm": "height",            // Visina u centimetrima
-                "tezina_kg": "weight",            // Težina u kilogramima
-                "omiljena_podloga": "favoriteSurface",  
-                "osvojeni_turniri": "hasWon",     // Osvojeni turniri
-                "igrac_id": "identifier",           
-                "najvisi_ranking": "highestRanking",  
-                "broj_osvojenih_turnira": "numberOfTitles" 
+                "tezina_kg": "weight"             // Težina u kilogramima
             },
             "@type": "ItemList",
             "itemListElement": result.rows.map(player => ({
-                "@type": "Person",                       // Tip objekta
-                "givenName": player.ime,                 // Ime
-                "familyName": player.prezime,            // Prezime
-                "nationality": player.nacionalnost,      // Nacionalnost
-                "age": player.godine,                    // Godine
-                "height": `${player.visina_cm} cm`,      // Visina
-                "weight": `${player.tezina_kg} kg`,      // Težina
-                "favoriteSurface": player.omiljena_podloga, 
-                "hasWon": player.osvojeni_turniri,       // Osvojeni turniri (može biti niz)
-                "identifier": player.igrac_id,             
-                "highestRanking": player.najvisi_ranking, 
-                "numberOfTitles": player.broj_osvojenih_turnira 
+                "@type": "Person",
+                "ime": player.ime,
+                "prezime": player.prezime,
+                "nacionalnost": player.nacionalnost,
+                "visina_cm": `${player.visina_cm} cm`,
+                "tezina_kg": `${player.tezina_kg} kg`,
+                "additionalProperty": [
+                    {
+                        "@type": "PropertyValue",
+                        "name": "godine",
+                        "value": player.godine
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "omiljena_podloga",
+                        "value": player.omiljena_podloga
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "osvojeni_turniri",
+                        "value": player.Osvojeni_turniri
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "igrac_id",
+                        "value": player.igrac_id
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "najvisi_ranking",
+                        "value": player.najvisi_ranking
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "broj_osvojenih_turnira",
+                        "value": player.broj_osvojenih_turnira
+                    }
+                ]
             }))
         };
 
@@ -524,24 +618,77 @@ app.post('/api/tennisPlayers', async (req, res) => {
 
         // Prepare response in JSON-LD format
         const responseJsonLd = {
-            "@context": "http://schema.org/",
+            "@context": {
+                "@vocab": "http://schema.org/",
+                "ime": "givenName",               // Ime igrača
+                "prezime": "familyName",          // Prezime igrača
+                "nacionalnost": "nationality",    // Nacionalnost
+                "visina_cm": "height",            // Visina u centimetrima
+                "tezina_kg": "weight"             // Težina u kilogramima
+            },
             "@type": "Person",
-            "identifier": nextIgracId,
-            "givenName": ime,
-            "familyName": prezime,
-            "nationality": nacionalnost,
-            "age": godine,
-            "height": `${visina_cm} cm`,
-            "weight": `${tezina_kg} kg`,
-            "favoriteSurface": omiljena_podloga,
-            "numberOfTitles": broj_osvojenih_turnira,
-            "highestRanking": najvisi_ranking,
-            "tournaments": turniri.map(tournament => ({
-                "@type": "SportsEvent",
-                "name": tournament.naziv,
-                "startDate": tournament.godina,
-                "surface": tournament.povrsina
-            }))
+                "@type": "Person",
+                "ime": ime,
+                "prezime": prezime,
+                "nacionalnost": nacionalnost,
+                "visina_cm": `${visina_cm} cm`,
+                "tezina_kg": `${tezina_kg} kg`,
+                "additionalProperty": [
+                    {
+                        "@type": "PropertyValue",
+                        "name": "godine",
+                        "value": godine
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "omiljena_podloga",
+                        "value": omiljena_podloga
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "osvojeni_turniri",
+                        "value": turniri.map((tournament) => (
+                            {
+                                "@context": {
+                                    "vocab": "http://schema.org/",
+                                    "naziv": "name",
+                                    "godina": "startDate"
+                                },
+                                "@type": "SportsEvent",
+                                "naziv": tournament.naziv,
+                                "godina": tournament.godina,
+                                "additionalProperty": [
+                                    {
+                                        "@type": "PropertyValue",
+                                        "name": "turnir_id",
+                                        "value": tournament.turnir_id
+                                    },
+                                    {
+                                        "@type": "PropertyValue",
+                                        "name": "povrsina",
+                                        "value": tournament.povrsina
+                                    }
+                                ]
+                            }
+                        ))
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "igrac_id",
+                        "value": nextIgracId
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "najvisi_ranking",
+                        "value": najvisi_ranking
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "broj_osvojenih_turnira",
+                        "value": broj_osvojenih_turnira
+                    }
+                ]
+            
         };
 
         res.status(201).json({
@@ -590,18 +737,54 @@ app.put('/api/tennisPlayers/:id', async (req, res) => {
         // Prepare response in JSON-LD format
         const updatedPlayer = result.rows[0];
         const responseJsonLd = {
-            "@context": "http://schema.org/",
+            "@context": {
+                "@vocab": "http://schema.org/",
+                "ime": "givenName",               // Ime igrača
+                "prezime": "familyName",          // Prezime igrača
+                "nacionalnost": "nationality",    // Nacionalnost
+                "visina_cm": "height",            // Visina u centimetrima
+                "tezina_kg": "weight"             // Težina u kilogramima
+            },
             "@type": "Person",
-            "identifier": updatedPlayer.igrac_id,
-            "givenName": updatedPlayer.ime,
-            "familyName": updatedPlayer.prezime,
-            "nationality": updatedPlayer.nacionalnost,
-            "age": updatedPlayer.godine,
-            "height": `${updatedPlayer.visina_cm} cm`,
-            "weight": `${updatedPlayer.tezina_kg} kg`,
-            "favoriteSurface": updatedPlayer.omiljena_podloga,
-            "numberOfTitles": updatedPlayer.broj_osvojenih_turnira,
-            "highestRanking": updatedPlayer.najvisi_ranking
+                "@type": "Person",
+                "ime": result.rows[0].ime,
+                "prezime": result.rows[0].prezime,
+                "nacionalnost": result.rows[0].nacionalnost,
+                "visina_cm": `${result.rows[0].visina_cm} cm`,
+                "tezina_kg": `${result.rows[0].tezina_kg} kg`,
+                "additionalProperty": [
+                    {
+                        "@type": "PropertyValue",
+                        "name": "godine",
+                        "value": result.rows[0].godine
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "omiljena_podloga",
+                        "value": result.rows[0].omiljena_podloga
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "osvojeni_turniri",
+                        "value": result.rows[0].Osvojeni_turniri
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "igrac_id",
+                        "value": result.rows[0].igrac_id
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "najvisi_ranking",
+                        "value": result.rows[0].najvisi_ranking
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "name": "broj_osvojenih_turnira",
+                        "value": result.rows[0].broj_osvojenih_turnira
+                    }
+                ]
+            
         };
 
         res.status(200).json(responseJsonLd);

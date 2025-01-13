@@ -45,7 +45,6 @@ document.getElementById('addPlayerForm').addEventListener('submit', async functi
         const povrsina = div.querySelector('input[name="povrsina"]').value;
 
         playerData.turniri.push({ naziv, godina, povrsina });
-        console.log("Player data: ",playerData)
     });
     console.log(playerData)
     try {
