@@ -6,20 +6,20 @@ async function getAllData() {
     const tennisPlayers = await response.json();
     const tableBody = document.querySelector("#playersTable tbody");
     tableBody.innerHTML = '';
-    tennisPlayers.forEach(tennisPlayer => {
+    tennisPlayers.itemListElement.forEach(tennisPlayer => {
         const rowElement = document.createElement("tr");
         rowElement.innerHTML = `
-            <td>${tennisPlayer.igrac_id}</td>
-            <td>${tennisPlayer.ime}</td>
-            <td>${tennisPlayer.prezime}</td>
-            <td>${tennisPlayer.nacionalnost}</td>
-            <td>${tennisPlayer.godine}</td>
-            <td>${tennisPlayer.visina_cm}</td>
-            <td>${tennisPlayer.tezina_kg}</td>
-            <td>${tennisPlayer.najvisi_ranking}</td>
-            <td>${tennisPlayer.broj_osvojenih_turnira}</td>
-            <td>${tennisPlayer.omiljena_podloga}</td>
-            <td>${tennisPlayer.Osvojeni_turniri.join(', ')}</td>
+            <td>${tennisPlayer.playerId || ''}</td>
+            <td>${tennisPlayer.givenName}</td>
+            <td>${tennisPlayer.familyName}</td>
+            <td>${tennisPlayer.nationality}</td>
+            <td>${tennisPlayer.age}</td>
+            <td>${tennisPlayer.height}</td>
+            <td>${tennisPlayer.weight}</td>
+            <td>${tennisPlayer.najvisi_ranking || ''}</td>
+            <td>${tennisPlayer.broj_osvojenih_turnira || ''}</td>
+            <td>${tennisPlayer.favoriteSurface}</td>
+            <td>${tennisPlayer.hasWon ? tennisPlayer.hasWon.join(', ') : ''}</td>
         `;
         tableBody.appendChild(rowElement);
     });
@@ -28,13 +28,13 @@ async function getAllData() {
     const tennisTournaments = await response2.json();
     const tableBody2 = document.querySelector("#tournamentsTable tbody");
     tableBody2.innerHTML = '';
-    tennisTournaments.forEach(tennisTournament => {
+    tennisTournaments.itemListElement.forEach(tennisTournament => {
         const rowElement = document.createElement("tr");
         rowElement.innerHTML = `
-            <td>${tennisTournament.turnir_id}</td>
-            <td>${tennisTournament.naziv}</td>
-            <td>${tennisTournament.godina}</td>
-            <td>${tennisTournament.povrsina}</td>
+            <td>${tennisTournament.turnir_id || ''}</td>  <!-- turnir_id -->
+            <td>${tennisTournament.name}</td>             <!-- naziv -->
+            <td>${tennisTournament.startDate}</td>        <!-- godina -->
+            <td>${tennisTournament.location?.surface || ''}</td> <!-- povrsina -->
         `;
         tableBody2.appendChild(rowElement);
     });
@@ -47,20 +47,20 @@ async function getPlayersData(searchTerm = '', attribute = '') {
     const tableBody = document.querySelector("#playersTable tbody");
     tableBody.innerHTML = '';
     
-    tennisPlayers.forEach(tennisPlayer => {
+    tennisPlayers.itemListElement.forEach(tennisPlayer => {
         const rowElement = document.createElement("tr");
         rowElement.innerHTML = `
-            <td>${tennisPlayer.igrac_id}</td>
-            <td>${tennisPlayer.ime}</td>
-            <td>${tennisPlayer.prezime}</td>
-            <td>${tennisPlayer.nacionalnost}</td>
-            <td>${tennisPlayer.godine}</td>
-            <td>${tennisPlayer.visina_cm}</td>
-            <td>${tennisPlayer.tezina_kg}</td>
-            <td>${tennisPlayer.najvisi_ranking}</td>
-            <td>${tennisPlayer.broj_osvojenih_turnira}</td>
-            <td>${tennisPlayer.omiljena_podloga}</td>
-            <td>${tennisPlayer.Osvojeni_turniri.join(', ')}</td>
+            <td>${tennisPlayer.playerId || ''}</td>
+            <td>${tennisPlayer.givenName}</td>
+            <td>${tennisPlayer.familyName}</td>
+            <td>${tennisPlayer.nationality}</td>
+            <td>${tennisPlayer.age}</td>
+            <td>${tennisPlayer.height}</td>
+            <td>${tennisPlayer.weight}</td>
+            <td>${tennisPlayer.najvisi_ranking || ''}</td>
+            <td>${tennisPlayer.broj_osvojenih_turnira || ''}</td>
+            <td>${tennisPlayer.favoriteSurface}</td>
+            <td>${tennisPlayer.hasWon ? tennisPlayer.hasWon.join(', ') : ''}</td>
         `;
         tableBody.appendChild(rowElement);
     });
@@ -73,13 +73,13 @@ async function getTournamentsData(searchTerm = '', attribute = '') {
     const tableBody = document.querySelector("#tournamentsTable tbody");
     tableBody.innerHTML = '';
     
-    tennisTournaments.forEach(tennisTournament => {
+    tennisTournaments.itemListElement.forEach(tennisTournament => {
         const rowElement = document.createElement("tr");
         rowElement.innerHTML = `
-            <td>${tennisTournament.turnir_id}</td>
-            <td>${tennisTournament.naziv}</td>
-            <td>${tennisTournament.godina}</td>
-            <td>${tennisTournament.povrsina}</td>
+            <td>${tennisTournament.turnir_id || ''}</td>  <!-- turnir_id -->
+            <td>${tennisTournament.name}</td>             <!-- naziv -->
+            <td>${tennisTournament.startDate}</td>        <!-- godina -->
+            <td>${tennisTournament.location?.surface || ''}</td> <!-- povrsina -->
         `;
         tableBody.appendChild(rowElement);
     });

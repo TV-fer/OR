@@ -67,12 +67,16 @@ const checkAuthentication = (req, res, next) => {
 
 // Rute
 app.get('/', (req, res) => {
-  const isAuthenticated = req.isAuthenticated();
-  res.send(
-    `<h1>Dobrodošli</h1>
-     ${isAuthenticated ? '<a href="/profile">Korisnički profil</a><br><a href="/logout">Odjava</a>' : '<a href="/login">Prijava</a>'}`
-  );
-});
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
+  
+  app.get('/dynamic-content', (req, res) => {
+    const isAuthenticated = req.isAuthenticated();
+    const dynamicContent = isAuthenticated
+      ? '<a href="/profile">Korisnički profil</a><br><a href="/logout">Odjava</a>'
+      : '<a href="/login">Prijava</a>';
+    res.send(dynamicContent);
+  });
 
 app.get('/login', passport.authenticate('auth0', {
   scope: 'openid email profile',
@@ -92,7 +96,8 @@ app.get('/profile', checkAuthentication, (req, res) => {
     `<h1>Korisnički profil</h1>
      <pre>${JSON.stringify(req.user, null, 2)}</pre>
      <a href="/refresh-data">Osvježi preslike</a><br>
-     <a href="/logout">Odjava</a>`
+     <a href="/logout">Odjava</a><br>
+     <a href="/">Početna stranica</a>`
   );
 });
 
@@ -135,7 +140,40 @@ app.get('/api/allTennisPlayers', async (req,res) => {   //DOHVAĆANJE CJELOKUPNE
             GROUP BY igr.igrac_id;
         `;
         const result = await pool.query(query, values);
-        res.status(200).json(result.rows);
+         // Dodavanje JSON-LD semantike
+         const players = {
+            "@context": {
+                "@vocab": "http://schema.org/",
+                "ime": "givenName",               // Ime igrača
+                "prezime": "familyName",          // Prezime igrača
+                "nacionalnost": "nationality",    // Nacionalnost
+                "godine": "age",                  // Godine
+                "visina_cm": "height",            // Visina u centimetrima
+                "tezina_kg": "weight",            // Težina u kilogramima
+                "omiljena_podloga": "favoriteSurface",  
+                "osvojeni_turniri": "hasWon",     // Osvojeni turniri
+                "igrac_id": "playerId",           
+                "najvisi_ranking": "highestRanking",  
+                "broj_osvojenih_turnira": "numberOfTitles" 
+            },
+            "@type": "ItemList",
+            "itemListElement": result.rows.map(player => ({
+                "@type": "Person",                       // Tip objekta
+                "givenName": player.ime,                 // Ime
+                "familyName": player.prezime,            // Prezime
+                "nationality": player.nacionalnost,      // Nacionalnost
+                "age": player.godine,                    // Godine
+                "height": `${player.visina_cm} cm`,      // Visina
+                "weight": `${player.tezina_kg} kg`,      // Težina
+                "favoriteSurface": player.omiljena_podloga, 
+                "hasWon": player.osvojeni_turniri,       // Osvojeni turniri (može biti niz)
+                "playerId": player.igrac_id,             
+                "highestRanking": player.najvisi_ranking, 
+                "numberOfTitles": player.broj_osvojenih_turnira 
+            }))
+        };
+
+        res.status(200).json(players);
     } catch (error) {
         console.error('Greška pri dohvaćanju svih podataka iz baze:', error);
         res.status(500).send('Greška pri dohvaćanju svih podataka iz baze');
@@ -152,7 +190,23 @@ app.get(`/api/allTennisTournaments`, async (req,res) => { //DOHVAĆANJE SVIH TUR
             ORDER BY turnir_id
         `;
         const result = await pool.query(query, values);
-        res.status(200).json(result.rows);
+        // Dodavanje JSON-LD
+        const tournaments = {
+            "@context": "http://schema.org/",
+            "@type": "ItemList",
+            "itemListElement": result.rows.map(tournament => ({
+                "@type": "SportsEvent",
+                "tournamentId": tournament.turnir_id,
+                "name": tournament.naziv,
+                "startDate": tournament.godina,
+                "sport": "Tennis",
+                "location": {
+                    "@type": "Place",
+                    "surface": tournament.povrsina
+                }
+            }))
+        };
+        res.status(200).json(tournaments);
     } catch (error) {
         console.log('Greška pri dohvaćanju svih turnira iz baze:', error);
         res.status(500).send('Greška pri dohvaćanju svih turnira iz baze');
@@ -175,7 +229,36 @@ app.get('/api/singleTennisPlayer', async (req,res) => { //DOHVAĆANJE POJEDINAČ
         `;
         const result = await pool.query(query, values);
         if (result.rows.length > 0) {
-            res.status(200).json(result.rows[0]);
+            const player = {
+                "@context": {
+                    "@vocab": "http://schema.org/",
+                    "ime": "givenName",               // Ime igrača
+                    "prezime": "familyName",          // Prezime igrača
+                    "nacionalnost": "nationality",    // Nacionalnost
+                    "godine": "age",                  // Godine
+                    "visina_cm": "height",            // Visina u centimetrima
+                    "tezina_kg": "weight",            // Težina u kilogramima
+                    "omiljena_podloga": "favoriteSurface",  
+                    "osvojeni_turniri": "hasWon",     // Osvojeni turniri
+                    "igrac_id": "playerId",           
+                    "najvisi_ranking": "highestRanking",  
+                    "broj_osvojenih_turnira": "numberOfTitles"
+                },
+                "@type": "Person",                       // Tip objekta
+                    "givenName": result.rows[0].ime,                 // Ime
+                    "familyName": result.rows[0].prezime,            // Prezime
+                    "nationality": result.rows[0].nacionalnost,      // Nacionalnost
+                    "age": result.rows[0].godine,                    // Godine
+                    "height": `${result.rows[0].visina_cm} cm`,      // Visina
+                    "weight": `${result.rows[0].tezina_kg} kg`,      // Težina
+                    "favoriteSurface": result.rows[0].omiljena_podloga, 
+                    "hasWon": result.rows[0].osvojeni_turniri,       // Osvojeni turniri (može biti niz)
+                    "playerId": result.rows[0].igrac_id,             
+                    "highestRanking": result.rows[0].najvisi_ranking, 
+                    "numberOfTitles": result.rows[0].broj_osvojenih_turnira 
+            };
+            
+            res.status(200).json(player);
         } else {
             res.status(404).send('No data found');
         }
@@ -198,7 +281,20 @@ app.get(`/api/singleTennisTournament`, async (req,res) => { //DOHVAĆANJE POJEDI
         `;
         const result = await pool.query(query, values);
         if (result.rows.length > 0) {
-            res.status(200).json(result.rows[0]);
+            const tournament = {
+                "@context": "http://schema.org/",
+                "@type": "SportsEvent",
+                "tournamentId": result.rows[0].turnir_id,
+                "name": result.rows[0].naziv,
+                "startDate": result.rows[0].godina,
+                "sport": "Tennis",
+                "location": {
+                    "@type": "Place",
+                    "surface": result.rows[0].povrsina
+                }
+            };
+
+            res.status(200).json(tournament);
         } else {
             res.status(404).send('No data found');
         }
@@ -232,7 +328,23 @@ app.get(`/api/tennisTournaments`, async (req,res) => { //DOHVAĆANJE FILTRIRANIH
             values = [numericSearch]; // Filter kao broj
         }
         const result = await pool.query(query, values);
-        res.status(200).json(result.rows);
+        const tournaments = {
+            "@context": "http://schema.org/",
+            "@type": "ItemList",
+            "itemListElement": result.rows.map(tournament => ({
+                "@type": "SportsEvent",
+                "tournamentId": tournament.turnir_id,
+                "name": tournament.naziv,
+                "startDate": tournament.godina,
+                "sport": "Tennis",
+                "location": {
+                    "@type": "Place",
+                    "surface": tournament.povrsina
+                }
+            }))
+        };
+
+        res.status(200).json(tournaments);
     } catch (error) {
         console.error('Greška pri dohvaćanju filtriranih turnira iz baze:', error);
         res.status(500).send('Greška pri dohvaćanju filtriranih turnira iz baze');
@@ -307,7 +419,40 @@ app.get('/api/tennisPlayers', async (req, res) => { //DOHVAĆANJE FILTRIRANIH RE
         
 
         const result = await pool.query(query, values);
-        res.status(200).json(result.rows);
+        // Dodavanje JSON-LD semantike
+        const players = {
+            "@context": {
+                "@vocab": "http://schema.org/",
+                "ime": "givenName",               // Ime igrača
+                "prezime": "familyName",          // Prezime igrača
+                "nacionalnost": "nationality",    // Nacionalnost
+                "godine": "age",                  // Godine
+                "visina_cm": "height",            // Visina u centimetrima
+                "tezina_kg": "weight",            // Težina u kilogramima
+                "omiljena_podloga": "favoriteSurface",  
+                "osvojeni_turniri": "hasWon",     // Osvojeni turniri
+                "igrac_id": "playerId",           
+                "najvisi_ranking": "highestRanking",  
+                "broj_osvojenih_turnira": "numberOfTitles" 
+            },
+            "@type": "ItemList",
+            "itemListElement": result.rows.map(player => ({
+                "@type": "Person",                       // Tip objekta
+                "givenName": player.ime,                 // Ime
+                "familyName": player.prezime,            // Prezime
+                "nationality": player.nacionalnost,      // Nacionalnost
+                "age": player.godine,                    // Godine
+                "height": `${player.visina_cm} cm`,      // Visina
+                "weight": `${player.tezina_kg} kg`,      // Težina
+                "favoriteSurface": player.omiljena_podloga, 
+                "hasWon": player.osvojeni_turniri,       // Osvojeni turniri (može biti niz)
+                "playerId": player.igrac_id,             
+                "highestRanking": player.najvisi_ranking, 
+                "numberOfTitles": player.broj_osvojenih_turnira 
+            }))
+        };
+
+        res.status(200).json(players);
     } catch (error) {
         console.error('Greška pri dohvaćanju filtriranih podataka (igraca) iz baze:', error);
         res.status(500).send('Greška pri dohvaćanju filtriranih podataka (igraca) iz baze');
