@@ -1,12 +1,19 @@
+require('dotenv').config();
 const express = require('express');
 const { Pool } = require('pg');
+const session = require('express-session');
+const passport = require('passport');
+const Auth0Strategy = require('passport-auth0');
+const bodyParser = require('body-parser');
 
 const app = express();
 app.use(express.json());
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: false }));
+
 const port = 3000;
 
-//uspostava komunikacije s bazom podataka
+// uspostava komunikacije s bazom podataka
 const pool = new Pool({
     user: 'postgres', 
     host: 'localhost',
@@ -14,6 +21,107 @@ const pool = new Pool({
     password: 'BazePodataka', 
     port: 5433,
 });
+
+// Postavljanje sesije
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+// Passport konfiguracija
+passport.use(
+  new Auth0Strategy(
+    {
+      domain: process.env.AUTH0_DOMAIN,
+      clientID: process.env.AUTH0_CLIENT_ID,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET,
+      callbackURL: process.env.AUTH0_CALLBACK_URL,
+    },
+    (accessToken, refreshToken, extraParams, profile, done) => {
+      return done(null, profile);
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Middleware za provjeru autentikacije
+const checkAuthentication = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+};
+
+// Rute
+app.get('/', (req, res) => {
+  const isAuthenticated = req.isAuthenticated();
+  res.send(
+    `<h1>Dobrodošli</h1>
+     ${isAuthenticated ? '<a href="/profile">Korisnički profil</a><br><a href="/logout">Odjava</a>' : '<a href="/login">Prijava</a>'}`
+  );
+});
+
+app.get('/login', passport.authenticate('auth0', {
+  scope: 'openid email profile',
+}));
+
+app.get('/callback', 
+  passport.authenticate('auth0', {
+    failureRedirect: '/',
+  }),
+  (req, res) => {
+    res.redirect('/');
+  }
+);
+
+app.get('/profile', checkAuthentication, (req, res) => {
+  res.send(
+    `<h1>Korisnički profil</h1>
+     <pre>${JSON.stringify(req.user, null, 2)}</pre>
+     <a href="/refresh-data">Osvježi preslike</a><br>
+     <a href="/logout">Odjava</a>`
+  );
+});
+
+app.get('/refresh-data', checkAuthentication, async (req, res) => {
+  // Dohvat podataka iz baze i spremanje u CSV i JSON
+  try {
+    const result = await pool.query('SELECT * FROM igraci');
+    const data = result.rows;
+
+    const fs = require('fs');
+    fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
+
+    const csvData = data.map(row => Object.values(row).join(',')).join('\n');
+    fs.writeFileSync('data.csv', csvData);
+
+    res.send('<h1>Podaci su osvježeni</h1><a href="/profile">Povratak na profil</a>');
+  } catch (error) {
+    console.error('Greška prilikom dohvaćanja podataka:', error);
+    res.status(500).send('Greška prilikom dohvaćanja podataka.');
+  }
+});
+
+app.get('/logout', (req, res) => {
+  req.logout(() => {
+    res.redirect(`https://${process.env.AUTH0_DOMAIN}/v2/logout?returnTo=${encodeURIComponent('http://localhost:3000/')}&client_id=${process.env.AUTH0_CLIENT_ID}`);
+  });
+});
+
+
 
 //GET--------------------------------------------------------------------------------------------------
 app.get('/api/allTennisPlayers', async (req,res) => {   //DOHVAĆANJE CJELOKUPNE KOLEKCIJE
