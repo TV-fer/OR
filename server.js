@@ -108,10 +108,10 @@ app.get('/refresh-data', checkAuthentication, async (req, res) => {
     const data = result.rows;
 
     const fs = require('fs');
-    fs.writeFileSync('./public/data.json', JSON.stringify(data, null, 2));
+    fs.writeFileSync('./public/tenis_igraci.json', JSON.stringify(data, null, 2));
 
     const csvData = data.map(row => Object.values(row).join(',')).join('\n');
-    fs.writeFileSync('./public/data.csv', csvData);
+    fs.writeFileSync('./public/tenis_igraci.csv', csvData);
 
     res.send('<h1>Podaci su osvježeni</h1><a href="/profile">Povratak na profil</a>');
   } catch (error) {
