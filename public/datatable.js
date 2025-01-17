@@ -6,7 +6,6 @@ async function getAllData() {
     const tennisPlayers = await response.json();
     const tableBody = document.querySelector("#playersTable tbody");
     tableBody.innerHTML = '';
-    console.log(tennisPlayers)
     tennisPlayers.itemListElement.forEach(tennisPlayer => {
         //console.log("The shit: ", tennisPlayer.additionalProperty[2].value.join(', '))
         const rowElement = document.createElement("tr");
@@ -30,7 +29,6 @@ async function getAllData() {
     const tennisTournaments = await response2.json();
     const tableBody2 = document.querySelector("#tournamentsTable tbody");
     tableBody2.innerHTML = '';
-    console.log(tennisTournaments)
     tennisTournaments.itemListElement.forEach(tennisTournament => {
         const rowElement = document.createElement("tr");
         rowElement.innerHTML = `
@@ -101,7 +99,7 @@ function applyTournamentsFilter() {
 
 //funkcija za download u CSV formatu
 function downloadCSV() {
-    const rows = Array.from(document.querySelectorAll("#tennisTable tbody tr"));
+    const rows = Array.from(document.querySelectorAll("#playersTable tbody tr"));
     const csvContent = [];
 
     rows.forEach(row => {
@@ -109,6 +107,7 @@ function downloadCSV() {
         csvContent.push(cellData.join(","));
     });
 
+    console.log(csvContent)
     const blob = new Blob([csvContent.join("\n")], { type: "text/csv" });
     const downloadLink = document.createElement("a");
     downloadLink.href = URL.createObjectURL(blob);
@@ -118,7 +117,7 @@ function downloadCSV() {
 
 //funkcija za download u JSON formatu
 function downloadJSON() {
-    const rows = Array.from(document.querySelectorAll("#tennisTable tbody tr"));
+    const rows = Array.from(document.querySelectorAll("#playersTable tbody tr"));
     const dataJSON = rows.map(row => {
         const cells = Array.from(row.querySelectorAll("td"));
         return {
@@ -135,7 +134,7 @@ function downloadJSON() {
             Osvojeni_turniri: cells[10].textContent.split(", ")
         };
     });
-
+    console.log("JSON DATA: ",dataJSON)
     const jsonFile = new Blob([JSON.stringify(dataJSON, null, 2)], { type: "application/json" });
     const jsonLink = document.createElement("a");
     jsonLink.href = URL.createObjectURL(jsonFile);

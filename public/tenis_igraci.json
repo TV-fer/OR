@@ -1,39 +1,18 @@
 [
   {
-    "igrac_id": 3,
-    "ime": "Roger",
-    "prezime": "Federer",
-    "nacionalnost": "Švicarska",
-    "godine": 42,
-    "visina_cm": 185,
-    "tezina_kg": 85,
+    "igrac_id": 25,
+    "ime": "Ante",
+    "prezime": "Antić",
+    "nacionalnost": "Hrvat",
+    "godine": 1,
+    "visina_cm": 1,
+    "tezina_kg": 1,
     "najvisi_ranking": 1,
-    "broj_osvojenih_turnira": 103,
-    "omiljena_podloga": "Trava"
-  },
-  {
-    "igrac_id": 7,
-    "ime": "Stefanos",
-    "prezime": "Tsitsipas",
-    "nacionalnost": "Grčka",
-    "godine": 25,
-    "visina_cm": 193,
-    "tezina_kg": 90,
-    "najvisi_ranking": 3,
-    "broj_osvojenih_turnira": 10,
-    "omiljena_podloga": "Zemlja"
-  },
-  {
-    "igrac_id": 10,
-    "ime": "Casper",
-    "prezime": "Ruud",
-    "nacionalnost": "Norveška",
-    "godine": 25,
-    "visina_cm": 183,
-    "tezina_kg": 77,
-    "najvisi_ranking": 2,
-    "broj_osvojenih_turnira": 10,
-    "omiljena_podloga": "Zemlja"
+    "broj_osvojenih_turnira": 1,
+    "omiljena_podloga": "Zemlja",
+    "Osvojeni_turniri": [
+      "Rolland Garros (2222) - Tvrda"
+    ]
   },
   {
     "igrac_id": 4,
@@ -45,67 +24,11 @@
     "tezina_kg": 84,
     "najvisi_ranking": 1,
     "broj_osvojenih_turnira": 46,
-    "omiljena_podloga": "Tvrda"
-  },
-  {
-    "igrac_id": 5,
-    "ime": "Daniil",
-    "prezime": "Medvedev",
-    "nacionalnost": "Rusija",
-    "godine": 27,
-    "visina_cm": 198,
-    "tezina_kg": 83,
-    "najvisi_ranking": 2,
-    "broj_osvojenih_turnira": 20,
-    "omiljena_podloga": "Tvrda"
-  },
-  {
-    "igrac_id": 8,
-    "ime": "Alexander",
-    "prezime": "Zverev",
-    "nacionalnost": "Njemačka",
-    "godine": 27,
-    "visina_cm": 198,
-    "tezina_kg": 86,
-    "najvisi_ranking": 2,
-    "broj_osvojenih_turnira": 20,
-    "omiljena_podloga": "Tvrda"
-  },
-  {
-    "igrac_id": 9,
-    "ime": "Jannik",
-    "prezime": "Sinner",
-    "nacionalnost": "Italija",
-    "godine": 22,
-    "visina_cm": 188,
-    "tezina_kg": 76,
-    "najvisi_ranking": 6,
-    "broj_osvojenih_turnira": 9,
-    "omiljena_podloga": "Tvrda"
-  },
-  {
-    "igrac_id": 2,
-    "ime": "Rafael",
-    "prezime": "Nadal",
-    "nacionalnost": "Španjolska",
-    "godine": 37,
-    "visina_cm": 185,
-    "tezina_kg": 85,
-    "najvisi_ranking": 1,
-    "broj_osvojenih_turnira": 92,
-    "omiljena_podloga": "Zemlja"
-  },
-  {
-    "igrac_id": 6,
-    "ime": "Carlos",
-    "prezime": "Alcaraz",
-    "nacionalnost": "Španjolska",
-    "godine": 20,
-    "visina_cm": 185,
-    "tezina_kg": 74,
-    "najvisi_ranking": 1,
-    "broj_osvojenih_turnira": 12,
-    "omiljena_podloga": "Zemlja"
+    "omiljena_podloga": "Tvrda",
+    "Osvojeni_turniri": [
+      "Wimbledon (2016) - Trava",
+      "US Open (2012) - Tvrda"
+    ]
   },
   {
     "igrac_id": 21,
@@ -117,7 +40,71 @@
     "tezina_kg": 123,
     "najvisi_ranking": 123,
     "broj_osvojenih_turnira": 123,
-    "omiljena_podloga": "Zemlja"
+    "omiljena_podloga": "Zemlja",
+    "Osvojeni_turniri": [
+      "nesto (143) - ewcc"
+    ]
+  },
+  {
+    "igrac_id": 3,
+    "ime": "Roger",
+    "prezime": "Federer",
+    "nacionalnost": "Švicarska",
+    "godine": 42,
+    "visina_cm": 185,
+    "tezina_kg": 85,
+    "najvisi_ranking": 1,
+    "broj_osvojenih_turnira": 103,
+    "omiljena_podloga": "Trava",
+    "Osvojeni_turniri": [
+      "Wimbledon (2017) - Trava",
+      "Australian Open (2018) - Tvrda"
+    ]
+  },
+  {
+    "igrac_id": 10,
+    "ime": "Casper",
+    "prezime": "Ruud",
+    "nacionalnost": "Norveška",
+    "godine": 25,
+    "visina_cm": 183,
+    "tezina_kg": 77,
+    "najvisi_ranking": 2,
+    "broj_osvojenih_turnira": 10,
+    "omiljena_podloga": "Zemlja",
+    "Osvojeni_turniri": [
+      "Swiss Open (2021) - Zemlja"
+    ]
+  },
+  {
+    "igrac_id": 9,
+    "ime": "Jannik",
+    "prezime": "Sinner",
+    "nacionalnost": "Italija",
+    "godine": 22,
+    "visina_cm": 188,
+    "tezina_kg": 76,
+    "najvisi_ranking": 6,
+    "broj_osvojenih_turnira": 9,
+    "omiljena_podloga": "Tvrda",
+    "Osvojeni_turniri": [
+      "Miami Open (2021) - Tvrda"
+    ]
+  },
+  {
+    "igrac_id": 7,
+    "ime": "Stefanos",
+    "prezime": "Tsitsipas",
+    "nacionalnost": "Grčka",
+    "godine": 25,
+    "visina_cm": 193,
+    "tezina_kg": 90,
+    "najvisi_ranking": 3,
+    "broj_osvojenih_turnira": 10,
+    "omiljena_podloga": "Zemlja",
+    "Osvojeni_turniri": [
+      "Monte Carlo Masters (2021) - Zemlja"
+    ]
   },
   {
     "igrac_id": 1,
@@ -129,43 +116,58 @@
     "tezina_kg": 77,
     "najvisi_ranking": 1,
     "broj_osvojenih_turnira": 95,
-    "omiljena_podloga": "Tvrda"
+    "omiljena_podloga": "Tvrda",
+    "Osvojeni_turniri": [
+      "Australian Open (2021) - Tvrda",
+      "Wimbledon (2022) - Trava"
+    ]
   },
   {
-    "igrac_id": 23,
-    "ime": "Ante",
-    "prezime": "Antić",
-    "nacionalnost": "Hrvat",
-    "godine": 123,
-    "visina_cm": 123,
-    "tezina_kg": 123,
-    "najvisi_ranking": 123,
-    "broj_osvojenih_turnira": 123,
-    "omiljena_podloga": "Tvrda"
+    "igrac_id": 5,
+    "ime": "Daniil",
+    "prezime": "Medvedev",
+    "nacionalnost": "Rusija",
+    "godine": 27,
+    "visina_cm": 198,
+    "tezina_kg": 83,
+    "najvisi_ranking": 2,
+    "broj_osvojenih_turnira": 20,
+    "omiljena_podloga": "Tvrda",
+    "Osvojeni_turniri": [
+      "US Open (2021) - Tvrda"
+    ]
   },
   {
-    "igrac_id": 24,
-    "ime": "Ante",
-    "prezime": "Antić",
-    "nacionalnost": "Hrvat",
-    "godine": 123,
-    "visina_cm": 123,
-    "tezina_kg": 123,
-    "najvisi_ranking": 123,
-    "broj_osvojenih_turnira": 123,
-    "omiljena_podloga": "Tvrda"
-  },
-  {
-    "igrac_id": 25,
-    "ime": "Ante",
-    "prezime": "Antić",
-    "nacionalnost": "Hrvat",
-    "godine": 1,
-    "visina_cm": 1,
-    "tezina_kg": 1,
+    "igrac_id": 2,
+    "ime": "Rafael",
+    "prezime": "Nadal",
+    "nacionalnost": "Španjolska",
+    "godine": 37,
+    "visina_cm": 185,
+    "tezina_kg": 85,
     "najvisi_ranking": 1,
-    "broj_osvojenih_turnira": 1,
-    "omiljena_podloga": "Zemlja"
+    "broj_osvojenih_turnira": 92,
+    "omiljena_podloga": "Zemlja",
+    "Osvojeni_turniri": [
+      "French Open (2020) - Zemlja",
+      "US Open (2019) - Tvrda"
+    ]
+  },
+  {
+    "igrac_id": 6,
+    "ime": "Carlos",
+    "prezime": "Alcaraz",
+    "nacionalnost": "Španjolska",
+    "godine": 20,
+    "visina_cm": 185,
+    "tezina_kg": 74,
+    "najvisi_ranking": 1,
+    "broj_osvojenih_turnira": 12,
+    "omiljena_podloga": "Zemlja",
+    "Osvojeni_turniri": [
+      "US Open (2022) - Tvrda",
+      "Madrid Open (2023) - Zemlja"
+    ]
   },
   {
     "igrac_id": 26,
@@ -177,6 +179,56 @@
     "tezina_kg": 80,
     "najvisi_ranking": 3,
     "broj_osvojenih_turnira": 12,
-    "omiljena_podloga": "Trava"
+    "omiljena_podloga": "Trava",
+    "Osvojeni_turniri": [
+      "Halle (2014) - Trava"
+    ]
+  },
+  {
+    "igrac_id": 23,
+    "ime": "Ante",
+    "prezime": "Antić",
+    "nacionalnost": "Hrvat",
+    "godine": 123,
+    "visina_cm": 123,
+    "tezina_kg": 123,
+    "najvisi_ranking": 123,
+    "broj_osvojenih_turnira": 123,
+    "omiljena_podloga": "Tvrda",
+    "Osvojeni_turniri": [
+      "Rolland Garros (2000) - Zemlja",
+      "Brisbane (2020) - Trava"
+    ]
+  },
+  {
+    "igrac_id": 24,
+    "ime": "Ante",
+    "prezime": "Antić",
+    "nacionalnost": "Hrvat",
+    "godine": 123,
+    "visina_cm": 123,
+    "tezina_kg": 123,
+    "najvisi_ranking": 123,
+    "broj_osvojenih_turnira": 123,
+    "omiljena_podloga": "Tvrda",
+    "Osvojeni_turniri": [
+      "Rolland Garros (2000) - Zemlja"
+    ]
+  },
+  {
+    "igrac_id": 8,
+    "ime": "Alexander",
+    "prezime": "Zverev",
+    "nacionalnost": "Njemačka",
+    "godine": 27,
+    "visina_cm": 198,
+    "tezina_kg": 86,
+    "najvisi_ranking": 2,
+    "broj_osvojenih_turnira": 20,
+    "omiljena_podloga": "Tvrda",
+    "Osvojeni_turniri": [
+      "ATP Finals (2018) - Tvrda",
+      "Madrid Open (2019) - Zemlja"
+    ]
   }
 ]

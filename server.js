@@ -104,7 +104,13 @@ app.get('/profile', checkAuthentication, (req, res) => {
 app.get('/refresh-data', checkAuthentication, async (req, res) => {
   // Dohvat podataka iz baze i spremanje u CSV i JSON
   try {
-    const result = await pool.query('SELECT * FROM igraci');
+    const result = await pool.query(`
+            SELECT igr.*, 
+                ARRAY_AGG(CONCAT(turn.naziv, ' (', turn.godina, ') - ', turn.povrsina)) AS "Osvojeni_turniri"
+            FROM igraci igr
+            LEFT JOIN turniri turn ON igr.igrac_id = turn.osvojio_id
+            GROUP BY igr.igrac_id;
+        `);
     const data = result.rows;
 
     const fs = require('fs');
